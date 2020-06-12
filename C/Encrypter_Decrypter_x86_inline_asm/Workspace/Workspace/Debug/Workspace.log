@@ -1,0 +1,23 @@
+﻿Build started 4/26/2018 2:38:38 PM.
+     1>Project "V:\CompOrgProject\Workspace\Workspace\Workspace.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Workspace.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W2 /WX- /sdl- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /FAcs /Fa"Debug\\" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt V:\CompOrgProject\DecryptData_Initial.cpp V:\CompOrgProject\EncryptData_Initial.cpp
+         EncryptData_Initial.cpp
+     1>v:\comporgproject\encryptdata_initial.cpp(210): warning C4409: illegal instruction size
+         DecryptData_Initial.cpp
+     1>v:\comporgproject\decryptdata_initial.cpp(45): warning C4409: illegal instruction size
+     1>v:\comporgproject\decryptdata_initial.cpp(125): warning C4409: illegal instruction size
+     1>v:\comporgproject\decryptdata_initial.cpp(133): warning C4409: illegal instruction size
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"V:\CompOrgProject\Workspace\Debug\Team_14_Project_00.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"V:\CompOrgProject\Workspace\Debug\Team_14_Project_00.pdb" /TLBID:1 /DYNAMICBASE:NO /NXCOMPAT /IMPLIB:"V:\CompOrgProject\Workspace\Debug\Team_14_Project_00.lib" /MACHINE:X86 Debug\CryptoMain_Initial.obj
+         Debug\DecryptData_Initial.obj
+         Debug\EncryptData_Initial.obj
+         "Debug\SHA-256.obj"
+         Workspace.vcxproj -> V:\CompOrgProject\Workspace\Debug\Team_14_Project_00.exe
+     1>Done Building Project "V:\CompOrgProject\Workspace\Workspace\Workspace.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.22

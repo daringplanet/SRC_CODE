@@ -1,0 +1,4 @@
+alice,stars
+bob,c00kies
+carlos,00seven
+abc,123

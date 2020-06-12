@@ -1,0 +1,224 @@
+;;; Program 4, Natural Language, Written by William Lippard, aju722
+
+
+;;; checkRequest
+;;;     Parameter:
+;;;         parse - a parse obj that is really a hash to input and recieve values
+;;;     Purpose:
+;;;         To check if the request is valid and to input the valid values in the parts of the grammer
+
+(defun checkRequest (parse) 
+    
+    
+    (prog (verb directObj prep indrectObj)
+       (setf verb (getToken parse) )
+       (if (eql (isa verb 'verb) nil ) (return nil) ) 
+       (putp 'verb parse verb)
+       
+       
+       (setf directObj (getToken parse) )
+        (if (isa directObj 'article) 
+            (setf directObj (getToken parse) ) )
+        (if (eql (isa directObj 'noun) nil ) (return nil))
+        (putp 'directObj parse directObj)
+    
+
+
+        (setf prep (getToken parse) )
+        (if (eql (isa prep 'prep) nil ) (return nil))
+        (putp 'prep parse prep)
+
+
+        (setf indirectObj (getToken parse) )
+        (if (isa indirectObj 'article) 
+            (setf indirectObj (getToken parse) ) )
+        (if (eql (isa indirectObj 'noun) nil ) (return nil) )
+        (putp 'indirectObj parse indirectObj)
+
+       (return (quality parse) )
+
+    
+
+
+    )
+    
+)
+
+
+;;;genSql
+;;;     Parameters:
+;;;         parse - a parse obj that is really a hash to input and recieve values
+;;;     Purpose
+;;;         To generate a sql statement based on the request
+
+(defun genSQL (parse) 
+
+    (prog (request verb directObj indirectObj)
+        
+        (setf verb (getp 'verb parse) )
+        (setf directObj (getP (getP 'directObj parse) table-ht) )
+        (setf indrectObj (getP (getP 'indirectObj parse) table-ht) )
+        
+        (if (eql directObj nil) (setf directObj (getP 'directObj parse) ) )
+        (if (eql indirectObj nil)  (setf indirectObj (getP 'indirectObj parse) ) )
+        
+        (setf request (list 'SELECT  directObj  'FROM indirectObj ) ) 
+        (if (eql verb 'count) (setf request (list 'SELECT 'COUNT(format NIL "\(*\)" ()) 'FROM indirectObj ) ) )
+        
+        
+       (setf request (qualSQL parse request) )
+       
+       
+       (return request)
+
+
+    )
+
+
+)
+
+;;;qualSQL
+;;;     Parameters:
+;;;         parse - a parse obj that really is a hash to input and recieve values
+;;;     Purpose:
+;;;         To generate SQL statment for the qualifing phrase, if any
+
+(defun qualSQL (parse request)
+
+
+    (prog (qualIndirectObj Comparator NotQual QualValue)
+        
+        (if (eql (getP 'qualIndirectObj parse) nil) (return request) )
+        (setf qualIndirectObj  (getp 'qualIndirectObj parse) )
+        (setf Comparator  (getP 'Comparator parse) )
+        (setf NotQual  (getP 'NotQual parse)  )
+        (setf QualValue  (getP 'QualValue parse) )
+
+        (cond   ( (eql Comparator 'EQUAL) (setf Comparator '=) )
+                ( (eql Comparator 'AFTER) (setf Comparator '> ) )
+                ( (eql Comparator 'BEFORE) (setf Comparator '< ) ) )
+
+        
+        (if (eql notQual 'not) (return ( append request (list 'WHERE qualIndirectObj '<> (format NIL "\"~a\"" QualValue) ) ) ) )
+        
+        (return ( append request (list 'WHERE qualIndirectObj  Comparator (format NIL "\"~a\"" QualValue) ) ) )
+
+
+
+    )
+
+)
+
+
+
+
+;;; quality
+;;;     Parameters:
+;;;         parse - a parse obj that is rally a hash to input and recieve values
+;;;     Purpose:
+;;;         to check, validate, and input the qualifing values in the grammer in the parse obj
+
+(defun quality (parse) 
+    
+
+    (prog (QualIndirectPrep QualIndirectObj Comparator QualValue)
+    
+
+        (setf QualIndrectPrep (getToken parse ) )
+    
+        (if (eql QualIndrectPrep nil) (return T) )
+    
+        (if (eql (isa QualIndrectPrep 'prep) nil ) (return nil) )
+        (putp 'QualIndirectPrep parse QualIndrectPrep)
+
+
+        (setf QualIndrectObj (getToken parse  ) )
+        (if (eql (isa QualIndrectObj 'noun) nil) (return nil) )
+        (putp 'QualIndirectObj parse QualIndrectObj)
+
+        (setf Comparator (getToken parse  ) )
+        (if (eql Comparator 'not)
+            (and (putp 'NotQual parse Comparator)
+                (setf Comparator (getToken parse) ) ) )
+        (if (eql (isa Comparator 'Comparator) nil) (return nil) )
+        (putp 'Comparator parse Comparator)
+
+
+        (setf QualValue (getToken parse ) ) 
+        (if (isa QualValue 'prep)  
+            (and (putp 'QualPrep parse QualValue)
+            (setf QualValue (getToken parse) ) ) )
+   
+        (putp 'QualValue parse QualValue)
+    
+        (return T)
+
+    )
+)
+
+
+
+
+;;; resetPartsOfSpeech
+;;;     Parameters:
+;;;         parse -  a parse obj that is rally a hash to input and recieve values
+;;;         partOfSpeech - a list of different parts of speech
+;;;     Purpose:
+;;;         To set each part of speech provided in the partOfSpeech list to nil
+
+(defun resetPartsOfSpeech (parse &rest partOfSpeech)
+    
+    (let (speech)
+        (dolist (speech partOfSpeech T)
+            (putp speech parse 'nil)
+        )
+    )
+
+)
+
+
+
+;;; set_isa
+;;;     Parameters:
+;;;         partOfSpeech - a grammer of speech
+;;;         words - a list of words that corrospond to the partOfSpeech outlined in the grammer
+;;;     Prupose:
+;;;         To build the partOfSpeech list of words that corrospond to that part of speech
+
+(defmacro set_isa (partofSpeech &rest words) 
+
+    (let (( g (gensym)) (word (gensym) ) )
+        `(do ((,g ' ,words (cdr ,g) ) )
+            (( null ,g) T)
+            (setf ,word (car ,g) )
+            (putp ,word word-dict ' ,partOfSpeech)
+         )
+    )
+
+)
+
+
+;;; isa
+;;;     Parameters:
+;;;         word - a word to check the type of speech
+;;;         partOfSpeech - a type of word
+;;;     Prupose
+;;;         To check to see if a word is indeed a part of that speech
+
+(defun isa (word partOfSpeech)
+    
+    (prog ( wordType)
+        (setf wordType (getp word word-dict) )
+       ( cond ( (eql wordType nil) (return nil) ) 
+              ( (eql wordType partOfSpeech) (return T) ) 
+              (T (return nil) )
+       )
+    )
+    
+    
+)
+
+
+
+
+

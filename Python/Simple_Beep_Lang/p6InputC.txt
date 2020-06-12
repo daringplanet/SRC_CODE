@@ -1,0 +1,32 @@
+# p6InputC.txt
+# copyright 2018 Larry W. Clark, this document may not be copied to any other website.
+VAR int money 87
+VAR int quarter 0
+VAR int dime 0
+VAR int penny 0
+VAR int working
+ASSIGN working money
+PRINT "For" money "cents," "change:"
+# Determine number of quarters
+Loop25: if > 25 working LAfter25
+    ASSIGN quarter + quarter 1
+    ASSIGN working - working 25
+    GOTO Loop25
+LAfter25: PRINT "quarters=" quarter
+
+# Determine number of quarters
+Loop10: if > 10 working LAfter10
+    ASSIGN dime + dime 1
+    ASSIGN working - working 10
+    GOTO Loop10
+LAfter10: PRINT "dimes=" dime
+
+# Determine number of pennies
+Loop1: if >  1 working LDone
+    ASSIGN penny + penny 1
+    ASSIGN working - working 1
+    GOTO Loop1
+
+LDone: PRINT "pennies=" penny
+
+PRINT "EndPgm"

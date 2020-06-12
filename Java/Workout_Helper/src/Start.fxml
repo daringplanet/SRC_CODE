@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.MainController">
+   <children>
+      <Label layoutX="194.0" layoutY="41.0" text="My Fitness App">
+         <font>
+            <Font name="Cambria" size="63.0" />
+         </font>
+      </Label>
+      <CheckBox fx:id="cardio" layoutX="227.0" layoutY="261.0" mnemonicParsing="false" onAction="#selectCardio" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: white;" text="Cardio">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="strength" layoutX="433.0" layoutY="261.0" mnemonicParsing="false" onAction="#selectStrength" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: white;" text="Strength">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </CheckBox>
+      <Button fx:id="start" layoutX="309.0" layoutY="436.0" mnemonicParsing="false" onAction="#startWorkout" text="Start Workout" />
+   </children>
+</AnchorPane>

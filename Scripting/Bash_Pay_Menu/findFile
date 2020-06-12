@@ -1,0 +1,12 @@
+#!/bin/bash
+
+read -p "Enter your APT number: " apt
+
+
+
+
+
+fileName=$(grep -F -r -l  "$apt" ~/CS3423/assignments/1assign/Data)
+
+cat $fileName
+

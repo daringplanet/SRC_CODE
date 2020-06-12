@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.MainController">
+   <children>
+      <Pane prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: white;">
+         <children>
+            <Label layoutX="143.0" layoutY="54.0" text="My Per$onal Budget">
+               <font>
+                  <Font name="Century Schoolbook" size="33.0" />
+               </font>
+            </Label>
+            <Button fx:id="budget" layoutX="200.0" layoutY="190.0" mnemonicParsing="false" onAction="#budgetHandle" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #00ccff; -fx-background-radius: 16.4, 15;" text="Budget Overview" />
+            <Button fx:id="trans" layoutX="200.0" layoutY="308.0" mnemonicParsing="false" onAction="#transHandle" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #00e673; -fx-background-radius: 16.4, 15;" text="Transactions" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

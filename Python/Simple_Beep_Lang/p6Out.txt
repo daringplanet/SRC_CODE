@@ -1,0 +1,52 @@
+BEEP source code in p6InputC.txt:
+ 1 # p6InputC.txt
+ 2 # copyright 2018 Larry W. Clark, this document may not be copied to any other website.
+ 3 VAR int money 87
+ 4 VAR int quarter 0
+ 5 VAR int dime 0
+ 6 VAR int penny 0
+ 7 VAR int working
+ 8 ASSIGN working money
+ 9 PRINT "For" money "cents," "change:"
+ 10 # Determine number of quarters
+ 11 Loop25: if > 25 working LAfter25
+ 12     ASSIGN quarter + quarter 1
+ 13     ASSIGN working - working 25
+ 14     GOTO Loop25
+ 15 LAfter25: PRINT "quarters=" quarter
+ 16 
+ 17 # Determine number of quarters
+ 18 Loop10: if > 10 working LAfter10
+ 19     ASSIGN dime + dime 1
+ 20     ASSIGN working - working 10
+ 21     GOTO Loop10
+ 22 LAfter10: PRINT "dimes=" dime
+ 23 
+ 24 # Determine number of pennies
+ 25 Loop1: if >  1 working LDone
+ 26     ASSIGN penny + penny 1
+ 27     ASSIGN working - working 1
+ 28     GOTO Loop1
+ 29 
+ 30 LDone: PRINT "pennies=" penny
+ 31 
+ 32 PRINT "EndPgm"
+Variables:
+	Var      Type      Value     
+	DIME      int       0         
+	MONEY     int       87        
+	PENNY     int       0         
+	QUARTER   int       0         
+	WORKING   int       
+Labels:
+	Label          Statement 
+	LAFTER10       22
+	LAFTER25       15
+	LDONE          30
+	LOOP1          25
+	LOOP10         18
+	LOOP25         11
+execution begins ...
+For 87 cents, change: 
+EndPgm 
+execution ends 36 lines executed

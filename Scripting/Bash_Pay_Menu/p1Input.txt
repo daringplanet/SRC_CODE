@@ -1,0 +1,25 @@
+C
+polyester@material.com
+Poly Ester
+APT-2C
+900
+2017-11-01
+P
+aking@xyz.com
+900
+C
+board@xyz.com
+Peg Board
+APT-2F
+900
+2017-11-02
+F
+APT-3D
+F
+APT-3F
+P
+bhead@xyz.com
+950
+P
+perrymecium@bio.com
+1000

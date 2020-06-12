@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="600.0" prefWidth="800.0">
+         <children>
+            <Label layoutX="99.0" layoutY="29.0" prefHeight="89.0" prefWidth="603.0" text="Grandma's Christmas Cookies" textFill="#c96767">
+               <font>
+                  <Font name="Britannic Bold" size="43.0" />
+               </font>
+            </Label>
+            <Label layoutX="99.0" layoutY="141.0" text="Ingredients">
+               <font>
+                  <Font name="Century Schoolbook" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="446.0" layoutY="141.0" text="Directions">
+               <font>
+                  <Font name="Century Schoolbook" size="25.0" />
+               </font>
+            </Label>
+            <TextArea editable="false" layoutX="421.0" layoutY="176.0" prefHeight="407.0" prefWidth="309.0" text="1. Preheat Oven to 375.&#10;2. Stir together flour, baking soda, &#10;     and baking powder&#10;3. In a separate bowl, cream butter&#10;    and sugar until smooth. Beat &#10;    in egg &amp; vanilla. Gradually &#10;    blend in dry ingredients&#10;4. Roll rounded spoonfuls of &#10;    dough into balls and place onto &#10;    ungreased cookie sheet.&#10;5. Bake 8-10 minutes or until golden&#10;6. Keep away from grandpa until&#10;     cool ( about 3 minutes ).">
+               <font>
+                  <Font name="Palatino Linotype" size="18.0" />
+               </font>
+            </TextArea>
+            <TextArea editable="false" layoutX="66.0" layoutY="176.0" prefHeight="236.0" prefWidth="247.0" text="3 cups all-purpose flour&#10;1 tsp baking soda&#10;0.5 tsp baking powder&#10;1 cup butter&#10;1.5 cups white sugar&#10;1 egg&#10;1 tsp vanilla extract">
+               <font>
+                  <Font name="Palatino Linotype" size="18.0" />
+               </font>
+            </TextArea>
+            <Separator layoutX="345.0" layoutY="176.0" orientation="VERTICAL" prefHeight="407.0" prefWidth="55.0" />
+         </children></Pane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,12 @@
+Student Name: William Lippard
+Input File Name : input.txt
+CPU Scheduling Alg : RR
+
+Process 1 is completed at 5 ms
+Process 4 is completed at 19 ms
+Process 2 is completed at 21 ms
+Process 3 is completed at 22 ms
+
+Average Waiting time = 23.00 ms
+Average Turnaround time = 5.50 ms
+Throughput = 0.18 jobs per ms

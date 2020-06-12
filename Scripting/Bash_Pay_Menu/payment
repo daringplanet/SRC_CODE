@@ -1,0 +1,31 @@
+#!/bin/bash
+echo "in payment"
+
+read -p "Enter the Email: " email
+read -p "Payment Ammount: " payAmmount
+
+
+if [ -n "$(find ~/CS3423/assignments/1assign/Data -name "$email" -mmin -5)" ]; then
+	echo "found file"
+	cd Data
+	 fileName=$email
+	 firstName=$( grep $'\ ' $email | cut -d\  -f2)
+	 lastName=$(grep $'\ ' $email | cut -d\  -f3)
+	 grep $'\n' $email 
+         grep $'\n' $email | cut -d\  -f4
+         #rent=$(cat $fileName | cut -d\  -f5)
+         #balance=$(cat $fileName | cut -d\  -f6)
+         #date=$(cat $fileName | cut -d\  -f7)
+
+
+	echo "firstName = $firstName"
+	echo "lastName = $lastName"
+	echo "aptNum = $aptNum"
+	#echo "rent = $rent"
+	 #echo "name = $name, $lastName, $aptNum, $rent, $balance, $date"
+	 cd ..
+
+else
+	echo "Error: No account found"
+	
+fi

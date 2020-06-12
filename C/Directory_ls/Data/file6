@@ -1,0 +1,6 @@
+# This is a comment line one
+# This is comment line two
+x=y; # this comment isnt in column one
+y = x / 100;
+print x, y;
+

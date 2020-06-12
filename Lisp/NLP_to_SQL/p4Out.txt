@@ -1,0 +1,255 @@
+
+(load "p4Lisp.txt")
+;; Loading file p4Lisp.txt ...
+;; Loaded file p4Lisp.txt
+T
+[2]> (load "p4LispDef.txt")
+;; Loading file p4LispDef.txt ...
+;; Loaded file p4LispDef.txt
+T
+[3]> (set_isa article a an the)
+T
+[4]> (set_isa noun movies movie rentals rental customer customers)
+T
+[5]> (set_isa noun ID title genre rating custNr name state date number gender)
+T
+[6]> (set_isa verb count select show print)
+T
+[7]> (set_isa prep of with to in for)
+T
+[8]> (set_isa comparator equal after before)
+T
+[9]> (set_isa adjective horror scifi romance comedadder action male female g pg pg13 r x )
+T
+[10]> 
+(putp 'movie table-ht 'movie)
+MOVIE
+[11]> (putp 'movies table-ht 'movie)
+MOVIE
+[12]> (putp 'rental table-ht 'rental)
+RENTAL
+[13]> (putp 'rentals table-ht 'rental)
+RENTAL
+[14]> (putp 'customer table-ht 'customer)
+CUSTOMER
+[15]> (putp 'customers table-ht 'customer)
+CUSTOMER
+[16]> 
+;;;
+;;; first form:  verb [article] directObj prep [article] indirectObj
+;;;
+(processRequest '(count the number of rentals ))  
+
+******************************************************************
+(COUNT THE NUMBER OF RENTALS)
+    checkRequest returned T
+    verb= COUNT
+    directObj= NUMBER
+    prep= OF
+    indirectObj= RENTALS
+    DBRequest= (SELECT COUNT (*) FROM RENTALS)
+T
+[17]> 
+(processRequest '(count the number of movies )) 
+
+******************************************************************
+(COUNT THE NUMBER OF MOVIES)
+    checkRequest returned T
+    verb= COUNT
+    directObj= NUMBER
+    prep= OF
+    indirectObj= MOVIES
+    DBRequest= (SELECT COUNT (*) FROM MOVIES)
+T
+[18]> 
+(processRequest '(show ID for movies )) 
+
+******************************************************************
+ (SHOW ID FOR MOVIES)
+    checkRequest returned T
+    verb= SHOW
+    directObj= ID
+    prep= FOR
+    indirectObj= MOVIES
+    DBRequest= (SELECT ID FROM MOVIES)
+T
+[19]> 
+;;;
+;;; second form: verb [article] directObj prep [article] indirectObj 
+;;;                   prep [article] qualIndirectObj comparator [prep] qualValue
+;;;
+(processRequest '(show the title of movies with rating equal to PG13))
+    directObj= TITLE
+    prep= OF
+    indirectObj= MOVIES
+    QualIndirectPrep= WITH
+    QualIndirectObj= RATING
+    Comparator= EQUAL
+    QualPrep= TO
+    QualValue= PG13
+    DBRequest= (SELECT TITLE FROM MOVIES WHERE RATING = "PG13")
+T
+[20]> 
+(processRequest ' (Count the number of rentals with date after 2018-10-01))
+
+******************************************************************
+(COUNT THE NUMBER OF RENTALS WITH DATE AFTER 2018-10-01)
+    checkRequest returned T
+    verb= COUNT
+    directObj= NUMBER
+    prep= OF
+    indirectObj= RENTALS
+    QualIndirectPrep= WITH
+    QualIndirectObj= DATE
+    Comparator= AFTER
+    QualPrep= NIL
+    QualValue= 2018-10-01
+    DBRequest= (SELECT COUNT (*) FROM RENTALS WHERE DATE > "2018-10-01")
+T
+[21]> 
+(processRequest '(Show the title for the movie with ID equal to HP001)) 
+
+******************************************************************
+ (SHOW THE TITLE FOR THE MOVIE WITH ID EQUAL TO HP001)
+    checkRequest returned T
+    verb= SHOW
+    directObj= TITLE
+    prep= FOR
+    indirectObj= MOVIE
+    QualIndirectPrep= WITH
+    QualIndirectObj= ID
+    Comparator= EQUAL
+    QualPrep= TO
+    QualValue= HP001
+    DBRequest= (SELECT TITLE FROM MOVIE WHERE ID = "HP001")
+T
+[22]> 
+(processRequest '(Select the name of the customer with custNr equal to 111)) 
+
+ (SELECT THE NAME OF THE CUSTOMER WITH CUSTNR EQUAL TO 111)
+    checkRequest returned T
+    verb= SELECT
+    directObj= NAME
+    prep= OF
+    indirectObj= CUSTOMER
+    QualIndirectPrep= WITH
+    QualIndirectObj= CUSTNR
+    Comparator= EQUAL
+    QualPrep= TO
+    QualValue= 111
+    DBRequest= (SELECT NAME FROM CUSTOMER WHERE CUSTNR = "111")
+T
+[23]> 
+;;;
+;;;  Examples with NOT
+;;;
+(processRequest '(Show title for movies with rating not equal to G)) 
+
+******************************************************************
+ (SHOW TITLE FOR MOVIES WITH RATING NOT EQUAL TO G)
+    checkRequest returned T
+    verb= SHOW
+    directObj= TITLE
+    prep= FOR
+    indirectObj= MOVIES
+    QualIndirectPrep= WITH
+    QualIndirectObj= RATING
+    NotQual = NOT
+    Comparator= EQUAL
+    QualPrep= TO
+    QualValue= G
+    DBRequest= (SELECT TITLE FROM MOVIES WHERE RATING <> "G")
+T
+[24]> 
+;;; 
+;;; Some invalid requests
+;;;
+(processRequest '(Show title for videos with a rating of G))
+
+******************************************************************
+ (SHOW TITLE FOR VIDEOS WITH A RATING OF G)
+    checkRequest returned NIL
+    verb= SHOW
+    directObj= TITLE
+    prep= FOR
+    indirectObj= NIL
+NIL
+[25]> (processRequest '(Show title for movies having a rating of G))
+
+******************************************************************
+ (SHOW TITLE FOR MOVIES HAVING A RATING OF G)
+    checkRequest returned NIL
+    verb= SHOW
+    directObj= TITLE
+    prep= FOR
+    indirectObj= MOVIES
+NIL
+[26]> (processRequest '(Show title for movies with a rating of G or PG)) 
+
+******************************************************************
+ (SHOW TITLE FOR MOVIES WITH A RATING OF G OR PG)
+    checkRequest returned NIL
+    verb= SHOW
+    directObj= TITLE
+    prep= FOR
+    indirectObj= MOVIES
+    QualIndirectPrep= WITH
+    QualIndirectObj= NIL
+NIL
+[27]> 
+;;; see if doing extra credit, return if not
+(if (NOT(EQL doingExtra 'EC2))
+(abort))
+[28]>
+(processRequest '(Show the title of movies in the horror genre)) 
+
+******************************************************************
+ (SHOW THE TITLE OF MOVIES IN THE HORROR GENRE)
+    checkRequest returned NIL
+    verb= SHOW
+    directObj= TITLE
+    prep= OF
+    indirectObj= MOVIES
+    QualIndirectPrep= IN
+    QualIndirectObj= NIL
+NIL
+[29]> 
+(processRequest '(Show the genre of movies with a G rating)) 
+
+******************************************************************
+  (SHOW THE GENRE OF MOVIES WITH A G RATING)
+    checkRequest returned NIL
+    verb= SHOW
+    directObj= GENRE
+    prep= OF
+    indirectObj= MOVIES
+    QualIndirectPrep= WITH
+    QualIndirectObj= NIL
+NIL
+[30]> 
+(processRequest ' (Count the number of customers with a male gender))
+
+******************************************************************
+ (COUNT THE NUMBER OF CUSTOMERS WITH A MALE GENDER)
+    checkRequest returned NIL
+    verb= COUNT
+    directObj= NUMBER
+    prep= OF
+    indirectObj= CUSTOMERS
+    QualIndirectPrep= WITH
+    QualIndirectObj= NIL
+NIL
+[31]> 
+(processRequest ' (Count the number of movies with a PG13 rating))
+
+******************************************************************
+ (COUNT THE NUMBER OF MOVIES WITH A PG13 RATING)
+    checkRequest returned NIL
+    verb= COUNT
+    directObj= NUMBER
+    prep= OF
+    indirectObj= MOVIES
+    QualIndirectPrep= WITH
+    QualIndirectObj= NIL
+NIL
+[32]> 

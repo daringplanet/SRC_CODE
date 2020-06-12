@@ -1,0 +1,17 @@
+MAIL FROM:<bill.king@croc.com>
+RCPT TO:<ADDRESS>
+DATE
+From: "Bill King" <bill.king@croc.com>
+To: "FULLNAME" <ADDRESS>
+Subject: Payment is Due
+Dear TITLE NAME,
+We appreciate your business with Completely Reliable Outlet Corp. You
+would be an even more valued customer if you will pay us $AMOUNT. If
+you don't pay us by DATE, we will double the amount you owe us.
+
+If you have any questions rearding your account, please contact
+me at 222-555-1234. PLEASE DO NOT RESPOND TO THIS EMAIL.
+
+Bill King
+Collections Manager
+

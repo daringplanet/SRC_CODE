@@ -1,0 +1,63 @@
+
+
+Int i=0;
+while i < 5:
+    
+    select i:
+        when 0, 1:
+            print(i);
+        when 2, 3:
+            print(i);
+        default:
+            break;
+    endselect;
+    
+    i+=1;
+endwhile;
+
+for i=0 to 12 by 2:
+
+    select i:
+        when 0, 2, 4:
+            print("lower half");
+        when 6, 8, 10:
+            print("upper half");
+            continue;
+        default:
+            break;
+    endselect;
+
+    print(i);
+
+endfor;
+        
+
+Int iTemp[] = 10, 20, 30, 40;
+
+for i in iTemp:
+    select i:
+        when 10, 20:
+            print(i);
+        when 30:
+            break;
+        default:
+            continue;
+    endselect;
+endfor;
+
+
+String str = "hello,world,my,name,is,Larry";
+String sTemp;
+for sTemp from str by ",":
+
+    select sTemp:
+        when "hello", "world":
+            print(sTemp);
+        when "my", "name", "is":
+            print(sTemp);
+            continue;
+        default:
+            print("_________");
+            break;
+    endselect;
+endfor;

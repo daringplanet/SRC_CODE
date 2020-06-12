@@ -1,0 +1,85 @@
+Original Book Information
+   Book Id   Title                                    Customer Ck Out Dt  Late Fee Max Late 
+   JOYPGM001 The Joys of Programming                  NONE     0000-00-00     0.25    50.00 
+   JOYPGM002 The Joys of Programming                  333333   2016-01-05     0.25    50.00 
+   JOYPGM003 The Joys of Programming                  NONE     0000-00-00     0.25    50.00 
+   JAVADD001 Java Isn't an Addiction                  NONE     0000-00-00     0.30    60.00 
+   PYTHON001 Learn Python Without Getting Bit         111111   2016-01-02     0.30    60.00 
+   PYTHON002 Learn Python Without Getting Bit         NONE     0000-00-00     0.30    60.00 
+   TECHDR001 My Technical Dream Job                   NONE     0000-00-00     0.25    50.00 
+   JOYPGM004 The Joys of Programming                  NONE     0000-00-00     0.25    50.00 
+   LINUXX004 Learning Linux                           333333   2016-01-05     0.30    60.00 
+   COBOLL001 How your Grandpa Coded in COBOL          NONE     0000-00-00     0.10    10.00 
+   EXCELL001 Excel at Excell                          444444   2015-09-01     0.80    65.00 
+   PERLLL001 Is PERL the Jewel of Programming?        NONE     0000-00-00     0.10    10.00 
+   SQLDBB001 Making Your DB Queries SQueeL            555555   2016-02-16     0.30    60.00 
+   PRANKS001 Software Pranks                          NONE     0000-00-00     0.90    60.00 
+   ARTINT001 A.I. Practical Algorithms                333333   2015-11-15     0.30    55.00 
+******************** Library Receipt ***********************
+111111 petem@xyz.net Pete Moss (previously owed 0.75)
+123 Boggy Lane
+New Orleans LA 70112
+   Trans  Book       Date      
+     C    JOYPGM001  2016-01-25 
+     C    TECHDR001  2016-01-25 
+     R    PYTHON001  2016-01-25   Late Fee =   2.70
+                                Total Fees =   3.45
+******************** Library Receipt ***********************
+222222 pcorn@abc.net Pop Corn (previously owed 0.00)
+456 Kernel
+San Antonio TX 78210
+   Trans  Book       Date      
+     C    TECHDR001  2016-01-25 *** Already checked out
+     C    TECHDR002  2016-01-25 *** Book Not Found
+     C    JOYPGM004  2016-01-25 
+                                Total Fees =   0.00
+******************** Library Receipt ***********************
+333333 pennyl@xyz.net Penny Loafer (previously owed 44.00)
+789 Walking St
+Philadelphia PA 19102
+   Trans  Book       Date      
+     R    LINUXX004  2016-01-25   Late Fee =   1.80
+     C    PERLLL001  2016-01-25 
+     R    ARTINT001  2016-01-25   Late Fee =  17.10
+                                Total Fees =  62.90
+******************** Library Receipt ***********************
+444444 hgilmore@xyz.net Adam Sandler (previously owed 1.25)
+444 Golf View
+Hollywood CA 92274
+   Trans  Book       Date      
+     R    EXCELL001  2016-01-25   Late Fee =  65.00
+                                Total Fees =  66.25
+******************** Library Receipt ***********************
+555555 butter@xyz.net Melba Toast (previously owed 0.00)
+222 Cracker Blvd
+San Antonio TX 78222
+   Trans  Book       Date      
+     R    SQLDBB001  2016-02-29 
+     C    LINUXX004  2016-02-29 
+                                Total Fees =   0.00
+******************** Library Receipt ***********************
+666666 joeK@xyz.net Joe King (previously owed 5.55)
+456 Laughing Way
+Zigzag OR 97049
+   Trans  Book       Date      
+     C    JOYPGM003  2016-03-01 
+     C    PRANKS001  2016-03-01 
+                                Total Fees =   5.55
+Book Information after Processing Transactions
+   Book Id   Title                                    Customer Ck Out Dt  Late Fee Max Late 
+   JOYPGM001 The Joys of Programming                  111111   2016-01-25     0.25    50.00 
+   JOYPGM002 The Joys of Programming                  333333   2016-01-05     0.25    50.00 
+   JOYPGM003 The Joys of Programming                  666666   2016-03-01     0.25    50.00 
+   JAVADD001 Java Isn't an Addiction                  NONE     0000-00-00     0.30    60.00 
+   PYTHON001 Learn Python Without Getting Bit         NONE     0000-00-00     0.30    60.00 
+   PYTHON002 Learn Python Without Getting Bit         NONE     0000-00-00     0.30    60.00 
+   TECHDR001 My Technical Dream Job                   111111   2016-01-25     0.25    50.00 
+   JOYPGM004 The Joys of Programming                  222222   2016-01-25     0.25    50.00 
+   LINUXX004 Learning Linux                           555555   2016-02-29     0.30    60.00 
+   COBOLL001 How your Grandpa Coded in COBOL          NONE     0000-00-00     0.10    10.00 
+   EXCELL001 Excel at Excell                          NONE     0000-00-00     0.80    65.00 
+   PERLLL001 Is PERL the Jewel of Programming?        333333   2016-01-25     0.10    10.00 
+   SQLDBB001 Making Your DB Queries SQueeL            NONE     0000-00-00     0.30    60.00 
+   PRANKS001 Software Pranks                          666666   2016-03-01     0.90    60.00 
+   ARTINT001 A.I. Practical Algorithms                NONE     0000-00-00     0.30    55.00 
+

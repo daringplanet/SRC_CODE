@@ -1,0 +1,35 @@
+Enter one of the follwing actons or CTRL-D to exit
+C -create a customer file
+P -accept a customer payment
+F -find customer by apartment number
+Error. File already exist
+Enter one of the follwing actons or CTRL-D to exit
+C -create a customer file
+P -accept a customer payment
+F -find customer by apartment number
+Error: No account found
+Enter one of the follwing actons or CTRL-D to exit
+C -create a customer file
+P -accept a customer payment
+F -find customer by apartment number
+Error. File already exist
+Enter one of the follwing actons or CTRL-D to exit
+C -create a customer file
+P -accept a customer payment
+F -find customer by apartment number
+sweet@xyz.com Candy Barr
+APT-3D 900 0 2017-10-07
+Enter one of the follwing actons or CTRL-D to exit
+C -create a customer file
+P -accept a customer payment
+F -find customer by apartment number
+P
+bhead@xyz.com
+950
+P
+perrymecium@bio.com
+1000
+Enter one of the follwing actons or CTRL-D to exit
+C -create a customer file
+P -accept a customer payment
+F -find customer by apartment number

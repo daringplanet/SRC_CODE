@@ -1,0 +1,97 @@
+
+(load "p3Lisp.txt")
+;; Loading file p3Lisp.txt ...
+;; Loaded file p3Lisp.txt
+T
+[2]> ;;; p3LispRun.txt begins ...
+;; test +=
+(setf x 10 y 5)
+5
+[3]> (+= x 5)
+15
+[4]> (print x)
+
+15 
+15
+[5]> (+= y x)
+20
+[6]> (print y)
+
+20 
+20
+[7]> 
+
+;; iterate
+(iterate i 1 5 1
+     (print (list 'one i) )
+     )
+
+(ONE 1) 
+(ONE 2) 
+(ONE 3) 
+(ONE 4) 
+(ONE 5) 
+T
+[8]> 
+(setf n 5)
+5
+[9]>   
+(iterate i 1 n 1
+     (print (list 'two i n))
+          (+=  i 1)
+          )
+
+(TWO 1 5) 
+(TWO 2 5) 
+(TWO 3 5) 
+(TWO 4 5) 
+(TWO 5 5) 
+T
+[10]> 
+(setf n 5)
+5
+[11]> 
+(iterate i 1 n 1
+     (print (list 'three i n))
+          (+= n 1)
+          )
+
+(THREE 1 5) 
+(THREE 2 6) 
+(THREE 3 7) 
+(THREE 4 8) 
+(THREE 5 9) 
+T
+[12]> 
+(setf n 5)
+5
+[13]> (setf inc 2)
+2
+[14]> 
+(iterate i 1 n inc
+     (print (list 'three i n inc))
+          (+= inc 1)
+)
+
+(THREE 1 5 2) 
+(THREE 3 5 3) 
+(THREE 5 5 4) 
+T
+[15]> 
+(setf n 5)
+5
+[16]> (setf inc 2)
+2
+[17]> (iterate i 1 (+ n 2) inc
+    (print (list 'four i n inc))
+    (+= n 1)
+    (+= i 1)
+    (+= inc 1)
+)
+
+(FOUR 1 5 2) 
+(FOUR 3 6 3) 
+(FOUR 5 7 4) 
+(FOUR 7 8 5) 
+T
+[18]>

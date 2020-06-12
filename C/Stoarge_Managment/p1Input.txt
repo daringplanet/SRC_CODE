@@ -1,0 +1,95 @@
+ALLOC C111 Customer 111,Sal A Mander,NULL,NULL,100.00
+PRTNODE C111
+ALLOC C222 Customer 222,Barb Wire,NULL,NULL,200.00
+PRTNODE C222
+ALLOC PPF001 LineItem PPF001,5,9.95,NULL
+PRTNODE PPF001
+*
+* #1 associate customer 111 with a next pointing to 222
+*
+ASSOC C111 pNextCust C222
+* customer 111's ref cnt should still be 1, but its pNextCust should point to 222
+PRTNODE C111 
+* customer 222's ref cnt should now be 2
+PRTNODE C222
+*
+* associate customer 111 to PPF001
+*
+ASSOC C111 pFirstItem PPF001
+PRTNODE C111
+* associate customer 222 to 333
+ALLOC C333 Customer 333,Misty Wind,NULL,NULL,70.00
+ASSOC C222 pNextCust C333
+*
+* #2 111 should point to 222 which points to 333
+*    111 should also point to PPF001
+*
+PRTALL
+* add another customer
+ALLOC C444 Customer 444,Emory Board,NULL,NULL,44.44
+ADDREF PC444 C444
+* #3 Customer 444 should have a ref count of 2
+PRTNODE C444
+DUMP
+*
+* Add a ref to 111 
+*
+ADDREF PC111 C111
+*  111 should have a ref cnt of 2
+PRTALL
+* #4 Decrement 111's ref cnt, this shouldn't affect anything else
+DEREF PC111 NULL
+DUMP
+SHOWFREELIST
+*
+* #5 remove the last ref to 111
+*    it should be gone, and there is some affect on the other nodes
+*
+DEREF C111 NULL
+DUMP
+SHOWFREELIST
+*
+* #6 Allocate another node and associate it with 222
+* Allocate another line item and associate 555 to it
+*
+ALLOC C555 Customer 555,Holly Graph,NULL,NULL,55.00
+ASSOC C555 pNextCust C222
+ALLOC SBB001 LineItem SBB001,1,19.95,NULL
+ASSOC C555 pFirstItem SBB001
+PRTALL
+SHOWFREELIST
+*
+* #7 assoc the line items 
+*
+ALLOC BOM001 LineItem BOM001,1,29.95,NULL
+ASSOC SBB001 pNextItem BOM001
+PRTALL
+SHOWFREELIST
+*
+* #8 decrement the count for SBB001, C222
+*
+DEREF SBB001 
+DEREF C222 
+DUMP
+SHOWFREELIST
+*
+* #9 DEREF C555 and it propagates decrements and frees:
+*    
+*
+DEREF C555 NULL
+DUMP
+SHOWFREELIST
+*
+* #10 Allocate 666 and assoc 444 to it.
+*
+ALLOC C666 Customer 666,Bob L Head,NULL,NULL,66.00
+ASSOC C444 pNextCust C666
+PRTALL
+*
+* #11 Assoc C444 with a different customer, 
+*     causing the old customer assoc (C666) to be decremented
+*
+ALLOC C777 Customer 777,Flo N Water,NULL,NULL,77.00
+ASSOC C444 pNextCust C777
+DUMP
+SHOWFREELIST

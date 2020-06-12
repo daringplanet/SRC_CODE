@@ -1,0 +1,747 @@
+Metadata
+Node Type  Beg Attr Sub Total Sz
+Customer      0           56
+		Attribute Name Type Offset Size
+		customerId       S       0   12
+		name             S      12   20
+		pFirstItem       P      32    8
+		pNextCust        P      40    8
+		balance          D      48    8
+LineItem      5           32
+		Attribute Name Type Offset Size
+		productId        S       0   10
+		iQtyReq          I      12    4
+		dCost            D      16    8
+		pNextItem        P      24    8
+>>> ALLOC C111 Customer 111,Sal A Mander,NULL,NULL,100.00
+>>> PRTNODE C111
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  100.000000
+>>> ALLOC C222 Customer 222,Barb Wire,NULL,NULL,200.00
+>>> PRTNODE C222
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       1     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  200.000000
+>>> ALLOC PPF001 LineItem PPF001,5,9.95,NULL
+>>> PRTNODE PPF001
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+*
+* #1 associate customer 111 with a next pointing to 222
+*
+>>> ASSOC C111 pNextCust C222
+* customer 111's ref cnt should still be 1, but its pNextCust should point to 222
+>>> PRTNODE C111 
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be0b8
+			balance          D  100.000000
+* customer 222's ref cnt should now be 2
+>>> PRTNODE C222
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  200.000000
+*
+* associate customer 111 to PPF001
+*
+>>> ASSOC C111 pFirstItem PPF001
+>>> PRTNODE C111
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  0x16be0f8
+			pNextCust        P  0x16be0b8
+			balance          D  100.000000
+* associate customer 222 to 333
+>>> ALLOC C333 Customer 333,Misty Wind,NULL,NULL,70.00
+>>> ASSOC C222 pNextCust C333
+*
+* #2 111 should point to 222 which points to 333
+*    111 should also point to PPF001
+*
+>>> PRTALL
+PPF001:0x16be0f8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       2     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+C333:0x16be120
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+C222:0x16be0b8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+C111:0x16be078
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  0x16be0f8
+			pNextCust        P  0x16be0b8
+			balance          D  100.000000
+
+* add another customer
+>>> ALLOC C444 Customer 444,Emory Board,NULL,NULL,44.44
+>>> ADDREF PC444 C444
+* #3 Customer 444 should have a ref count of 2
+>>> PRTNODE C444
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+>>> DUMP
+	Address  Mem   Size
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  0x16be0f8
+			pNextCust        P  0x16be0b8
+			balance          D  100.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       2     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+*
+* Add a ref to 111 
+*
+>>> ADDREF PC111 C111
+*  111 should have a ref cnt of 2
+>>> PRTALL
+PC111:0x16be078
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       2     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  0x16be0f8
+			pNextCust        P  0x16be0b8
+			balance          D  100.000000
+C444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+PPF001:0x16be0f8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       2     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+PC444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+C333:0x16be120
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+C222:0x16be0b8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+C111:0x16be078
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       2     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  0x16be0f8
+			pNextCust        P  0x16be0b8
+			balance          D  100.000000
+
+* #4 Decrement 111's ref cnt, this shouldn't affect anything else
+>>> DEREF PC111 NULL
+>>> DUMP
+	Address  Mem   Size
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  111
+			name             S  Sal A Mander
+			pFirstItem       P  0x16be0f8
+			pNextCust        P  0x16be0b8
+			balance          D  100.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       2     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+>>> SHOWFREELIST
+	NodeType Address  NextFree
+	     0
+	         NULL
+	     1
+	         NULL
+*
+* #5 remove the last ref to 111
+*    it should be gone, and there is some affect on the other nodes
+*
+>>> DEREF C111 NULL
+>>> DUMP
+	Address  Mem   Size
+	016BE070 Free    64 pNextFree=00000000 
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       1     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+>>> SHOWFREELIST
+	NodeType Address  NextFree
+	     0
+	         016BE070 00000000
+	     1
+	         NULL
+*
+* #6 Allocate another node and associate it with 222
+* Allocate another line item and associate 555 to it
+*
+>>> ALLOC C555 Customer 555,Holly Graph,NULL,NULL,55.00
+>>> ASSOC C555 pNextCust C222
+>>> ALLOC SBB001 LineItem SBB001,1,19.95,NULL
+>>> ASSOC C555 pFirstItem SBB001
+>>> PRTALL
+SBB001:0x16be1a0
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be198         40      1       2     0x16be1a0 
+			Attr Name      Type Value     
+			productId        S  SBB001
+			iQtyReq          I  1
+			dCost            D  19.950000
+			pNextItem        P  (nil)
+PC111:(nil)
+C444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+PPF001:0x16be0f8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+C555:0x16be078
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  555
+			name             S  Holly Graph
+			pFirstItem       P  0x16be1a0
+			pNextCust        P  0x16be0b8
+			balance          D  55.000000
+PC444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+C333:0x16be120
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+C222:0x16be0b8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+C111:(nil)
+
+>>> SHOWFREELIST
+	NodeType Address  NextFree
+	     0
+	         NULL
+	     1
+	         NULL
+*
+* #7 assoc the line items 
+*
+>>> ALLOC BOM001 LineItem BOM001,1,29.95,NULL
+>>> ASSOC SBB001 pNextItem BOM001
+>>> PRTALL
+SBB001:0x16be1a0
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be198         40      1       2     0x16be1a0 
+			Attr Name      Type Value     
+			productId        S  SBB001
+			iQtyReq          I  1
+			dCost            D  19.950000
+			pNextItem        P  0x16be1c8
+PC111:(nil)
+C444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+PPF001:0x16be0f8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+BOM001:0x16be1c8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be1c0         40      1       2     0x16be1c8 
+			Attr Name      Type Value     
+			productId        S  BOM001
+			iQtyReq          I  1
+			dCost            D  29.950000
+			pNextItem        P  (nil)
+C555:0x16be078
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  555
+			name             S  Holly Graph
+			pFirstItem       P  0x16be1a0
+			pNextCust        P  0x16be0b8
+			balance          D  55.000000
+PC444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+C333:0x16be120
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+C222:0x16be0b8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+C111:(nil)
+
+>>> SHOWFREELIST
+	NodeType Address  NextFree
+	     0
+	         NULL
+	     1
+	         NULL
+*
+* #8 decrement the count for SBB001, C222
+*
+>>> DEREF SBB001 
+>>> DEREF C222 
+>>> DUMP
+	Address  Mem   Size
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       1     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  555
+			name             S  Holly Graph
+			pFirstItem       P  0x16be1a0
+			pNextCust        P  0x16be0b8
+			balance          D  55.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       1     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  222
+			name             S  Barb Wire
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be120
+			balance          D  200.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       2     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be198         40      1       1     0x16be1a0 
+			Attr Name      Type Value     
+			productId        S  SBB001
+			iQtyReq          I  1
+			dCost            D  19.950000
+			pNextItem        P  0x16be1c8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be1c0         40      1       2     0x16be1c8 
+			Attr Name      Type Value     
+			productId        S  BOM001
+			iQtyReq          I  1
+			dCost            D  29.950000
+			pNextItem        P  (nil)
+>>> SHOWFREELIST
+	NodeType Address  NextFree
+	     0
+	         NULL
+	     1
+	         NULL
+*
+* #9 DEREF C555 and it propagates decrements and frees:
+*    
+*
+>>> DEREF C555 NULL
+>>> DUMP
+	Address  Mem   Size
+	016BE070 Free    64 pNextFree=016BE0B0 
+	016BE0B0 Free    64 pNextFree=00000000 
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       1     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  44.440000
+	016BE198 Free    40 pNextFree=00000000 
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be1c0         40      1       1     0x16be1c8 
+			Attr Name      Type Value     
+			productId        S  BOM001
+			iQtyReq          I  1
+			dCost            D  29.950000
+			pNextItem        P  (nil)
+>>> SHOWFREELIST
+	NodeType Address  NextFree
+	     0
+	         016BE070 016BE0B0
+	         016BE0B0 00000000
+	     1
+	         016BE198 00000000
+*
+* #10 Allocate 666 and assoc 444 to it.
+*
+>>> ALLOC C666 Customer 666,Bob L Head,NULL,NULL,66.00
+>>> ASSOC C444 pNextCust C666
+>>> PRTALL
+C222:0x16be0b8
+	016BE0B0 Free    64 pNextFree=00000000 
+C333:0x16be120
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       1     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+PC444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be078
+			balance          D  44.440000
+C111:(nil)
+C555:(nil)
+BOM001:0x16be1c8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be1c0         40      1       1     0x16be1c8 
+			Attr Name      Type Value     
+			productId        S  BOM001
+			iQtyReq          I  1
+			dCost            D  29.950000
+			pNextItem        P  (nil)
+PPF001:0x16be0f8
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+C444:0x16be160
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       2     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be078
+			balance          D  44.440000
+PC111:(nil)
+C666:0x16be078
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       2     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  666
+			name             S  Bob L Head
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  66.000000
+SBB001:0x16be1a0
+	016BE198 Free    40 pNextFree=00000000 
+
+*
+* #11 Assoc C444 with a different customer, 
+*     causing the old customer assoc (C666) to be decremented
+*
+>>> ALLOC C777 Customer 777,Flo N Water,NULL,NULL,77.00
+>>> ASSOC C444 pNextCust C777
+>>> DUMP
+	Address  Mem   Size
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be070         64      0       2     0x16be078 
+			Attr Name      Type Value     
+			customerId       S  666
+			name             S  Bob L Head
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  66.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0b0         64      0       2     0x16be0b8 
+			Attr Name      Type Value     
+			customerId       S  777
+			name             S  Flo N Water
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  77.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be0f0         40      1       1     0x16be0f8 
+			Attr Name      Type Value     
+			productId        S  PPF001
+			iQtyReq          I  5
+			dCost            D  9.950000
+			pNextItem        P  (nil)
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be118         64      0       1     0x16be120 
+			Attr Name      Type Value     
+			customerId       S  333
+			name             S  Misty Wind
+			pFirstItem       P  (nil)
+			pNextCust        P  (nil)
+			balance          D  70.000000
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be158         64      0       1     0x16be160 
+			Attr Name      Type Value     
+			customerId       S  444
+			name             S  Emory Board
+			pFirstItem       P  (nil)
+			pNextCust        P  0x16be0b8
+			balance          D  44.440000
+	016BE198 Free    40 pNextFree=00000000 
+	Alloc Address  Size NodeType  RefCnt  DataAddress   
+ 	0x16be1c0         40      1       1     0x16be1c8 
+			Attr Name      Type Value     
+			productId        S  BOM001
+			iQtyReq          I  1
+			dCost            D  29.950000
+			pNextItem        P  (nil)
+>>> SHOWFREELIST
+	NodeType Address  NextFree
+	     0
+	         NULL
+	     1
+	         016BE198 00000000
+
+

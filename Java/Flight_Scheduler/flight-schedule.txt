@@ -1,0 +1,4 @@
+866,commercial,SAT,LAS,13:05,14:00
+815,commercial,SAT,LAS,08:00,09:05
+267,private,SAT,SLC,05:50,09:50
+896,commercial,SAT,JFK,07:00,11:50

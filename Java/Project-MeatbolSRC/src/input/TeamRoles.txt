@@ -1,0 +1,5 @@
+For this specific assignment, I have done all the coding and 
+commenting, but both Katherine and Luis did read all the code, 
+and we all sat down discussing the code and its behavior. In other words, 
+I had the all the primary responsibilities for all the files, 
+and Katherine and Luis reviewed all the files.

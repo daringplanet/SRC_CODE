@@ -1,0 +1,172 @@
+;;; useful functions for LISP natural language parsing program
+
+;;; Set up the parse-obj and word-dict
+(setf parse-obj (MAKE-HASH-TABLE))
+(setf word-dict (MAKE-HASH-TABLE))
+(setf table-ht  (MAKE-HASH-TABLE))
+
+
+;;; processRequest 
+;;;    Parameters:
+;;;       request - a list of words making a request
+;;;    Purpose:
+;;;       - Sets up necessary information (see below) and invokes the student's checkRequest
+;;;         function.  
+;;;       - Since the student's checkRequest sets the parts of speech, processRequest prints
+;;;         those parts of speeach.
+;;;       - Returns T if the request is a valid request.  Otherwise, NIL is returned.
+;;;    Notes:
+;;;       - Sets the parse-obj hash table to contain the request
+;;;       - Sets the cursor position to zero.
+;;;       - Uses resetPartsOfSpeech to reset the values of each part of speech.
+;;;       - Prints the request
+;;;       - Invokes checkRequest to check for valid syntax and prints
+;;;         the result.
+;;;       - Prints the value for each part of speech
+;;;       - Invokes makeDBRequest to generate a database request from the parts of speeach
+;;;    Notes:
+;;;       - Requests will not contain punctuation since
+;;;             -- commas have a meaning in Common LISP associated with backquote
+;;;             -- periods are used for dotted pairs
+;;;; 
+
+
+(defun processRequest(request)
+    (PROG (result)
+    ;;; Save the request in parse-obj.
+    (putp 'request parse-obj request) 
+    ;;; Set the cursor position to 0.
+    (putp 'cursor parse-obj 0)
+
+    ;;; reset the parts of speech to NIL
+    (resetPartsOfSpeech parse-obj 'verb 'directObj 'prep 'indirectObj 'QualIndirectPrep 'QualIndirectObj)
+    (resetPartsOfSpeech parse-obj 'Comparator 'NotQual 'QualPrep 'QualValue)
+    
+    (format T "~% ******************************************************************")
+    (format T "~%  ~a" request)
+    (setf result (checkRequest parse-Obj))
+    (format T "~%    checkRequest returned ~a" result)
+    (format T "~%    verb= ~a" (getp 'verb parse-obj))
+    (format T "~%    directObj= ~a" (getp 'directObj parse-obj))
+    (format T "~%    prep= ~a" (getp 'prep parse-obj))
+    (format T "~%    indirectObj= ~a" (getp 'indirectObj parse-obj))
+
+    ;;; if we have a qual indirect, show it
+    (cond ((or  (getp 'QualIndirectPrep parse-obj)
+    (getp 'QualIndirectObj parse-obj))
+    (format T "~%    QualIndirectPrep= ~a" (getp 'QualIndirectPrep parse-obj))
+    (format T "~%    QualIndirectObj= ~a" (getp 'QualIndirectObj parse-obj))
+    ))
+    ;;; if we have qual, show it
+    (cond ((or  (getp 'Comparator parse-obj)
+        (getp 'NotQual parse-obj)
+        (getp 'QualPrep parse-obj)
+        (getp 'QualValue parse-obj))    
+    (if (getp 'NotQual parse-obj)
+        (format T "~%    NotQual = ~a" (getp 'NotQual parse-obj)))
+    (format T "~%    Comparator= ~a" (getp 'Comparator parse-obj))
+    (format T "~%    QualPrep= ~a" (getp 'QualPrep parse-obj))
+    (format T "~%    QualValue= ~a" (getp 'QualValue parse-obj))
+    ))
+    (if (not result) (return result))
+
+    ;;; see if doing extra credit, return if not
+    (if (NOT doingExtra)
+        (return result))
+
+    ;;; generate the SQL and show that SQL query
+    (setf query (genSQL parse-Obj))
+    (format T "~%    DBRequest= ~a" query)
+
+    (return result) ) 
+)
+
+;;; putp 
+;;;    Parameters:
+;;;       symbol   - symbol to be given the property value
+;;;       ht       - hash table to store the symbol and its property value
+;;;       value    - the property value
+;;;    Purpose:
+;;;       stores the property value for the symbol in the specified hash table
+;;;    Notes:
+;;;       If the symbol isn't an ATOM, putp breaks execution with an ERROR.
+;;;    Example Usage:
+;;;       (putp 'prep parse preposition)
+;;;       (putp word word-dict partOfSpeech)
+
+(defun putp (symbol ht value)
+    (if (ATOM symbol)
+        (setf (gethash symbol ht) value)
+        (ERROR "~s is not a valid symbol for putp" symbol)
+    )
+)
+
+;;; getp 
+;;;    Parameters:
+;;;       symbol   - symbol about which we want its property value
+;;;       ht       - hash table which stores the symbol and its property value
+;;;    Purpose:
+;;;       Returns the property value for the symbol in the specified hash table
+;;;       If not found, it returns NIL.
+;;;    Example Usage:
+;;;       (getp word word-dict)  would return the partOfSpeech for that word
+;;;       (getp 'request parse-obj)  would return the original request from the parse-obj.
+(defun getp (symbol ht)
+    (gethash symbol ht) )
+
+;;; getCursor 
+;;;    Parameters:
+;;;       parse - the parse object containing a request, cursor position, and
+;;;               value for each part of speech
+;;;    Purpose:
+;;;       returns the current cursor position (relative to zero)
+(defun getCursor (parse)
+    (getp 'cursor parse) 
+)
+
+;;; setCursor 
+;;;    Parameters:
+;;;       parse - the parse object containing a request, cursor position, and
+;;;               value for each part of speech
+;;;       cursorPosition - new cursor position
+;;;    Purpose:
+;;;       Sets the value of the cursor position (relative to zero) in the
+;;;       parse object
+;;;    Notes:
+;;;       If the cursorPosition isn't a numeric, setCursor breaks execution 
+;;;       with an ERROR.
+(defun setCursor (parse cursorPosition)
+    (if (numberp cursorPosition)
+        (putp 'cursor parse cursorPosition)
+        (ERROR "~s is not a numeric argument for setCursor" cursorPosition)
+    )
+)
+
+;;; getToken
+;;;    Parameters:
+;;;       parse - the parse object containing a request, cursor position, and
+;;;               value for each part of speech
+;;;    Purpose:
+;;;       returns the next token from the request.  If there are no more
+;;;       tokens, it returns NIL.
+;;;    Notes:
+;;;       This modifies the cursor position after getting the current token
+;;;       at the old position.
+
+(defun getToken (parse)
+    (prog (temp)
+    (setf temp (nth (getp  'cursor parse) (getp  'request parse))) 
+    (setCursor parse (1+ (getp 'cursor parse))) 
+    (return temp) )
+)
+
+
+
+;;; defaulting doingExtra to NIL
+(setf doingExtra 'EC1)
+
+
+
+
+
+

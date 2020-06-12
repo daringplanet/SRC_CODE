@@ -1,0 +1,24 @@
+version: "3"
+services:
+    db:
+        build: ./mysql-service
+        environment:
+            MYSQL_DATABASE: archives
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_USER: mysql
+            MYSQL_PASSWORD: password
+            DATABASE_HOST: db
+    node:
+        build: ./node-swagger-api/src
+        environment:
+          DATABASE_HOST: db
+          MYSQL_PORT: 3306
+          MYSQL_DATABASE: archives
+          MYSQL_USER: mysql
+          MYSQL_PASSWORD: password
+        ports:
+            - "12020:12020"
+            - "12021:12021"
+        depends_on:
+            - "db"
+        restart: on-failure

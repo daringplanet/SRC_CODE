@@ -1,0 +1,38 @@
+;;; Program 3, Macros, Written badder William Lippard, aju722
+
+
+
+;;; +=
+;;;     Parameters:
+;;;         num - an atom that contains a number
+;;;         adder - an number or atom that contains a number
+;;;     Purpose:
+;;;         sets num to the new number of num + adder
+
+(defmacro += (num adder)
+        `( setf ,num ( + ,num ,adder) ) 
+)
+
+
+;;; iterate
+;;;     Parameters:
+;;;         controlVariable - variable that will be loop on
+;;;         beginValueExpr - variable that is the starting point in the loop
+;;;         endValueExpr - variable that is the ending point in the loop
+;;;         incExpr - variable that increments the controlVariable
+;;;         bodyexprN - List of expresions that is executed in the loop body
+;;;     Purpose:
+;;;         To iterate over a loop a set numbe of time and to execute the body expressions inside the loop
+
+(defmacro iterate (controlVariable beginValueExpr endValueExpr incExpr &rest bodyexprN) 
+    (let( (g (gensym) ) ( endValue (gensym) ) (incValue (gensym ) ) )
+        `(do* ( (,incValue ,incExpr) ( ,g ,beginValueExpr (+ ,g ,incValue) ) (,endValue ,endValueExpr) )
+        (( > ,g  ,endValue) T )
+        (setf ,controlVariable ,g)
+        ,@ bodyexprN ) 
+    )
+
+)
+
+
+

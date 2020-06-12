@@ -1,0 +1,80 @@
+Float D;
+A = 10;
+B = 6;
+D = 25;
+print(">> Minus test, A=", A, "B=", B, "D=", D);
+print("D-A=", D-A);
+print("-A=", -A);
+print("-D=", -D);
+A = -B;
+print("A=-B =", A);
+
+// Simple if
+i = 0;
+print(">>> First If");
+if false: // check for TX
+    // It is TX
+    print("\tloc is", loc);
+    // it is ok to have this statement on multiple lines.  
+    // That is why we have a semicolon
+    i 
+       = 
+          i 
+          + 1;
+endif;
+print("\tDone with first if");
+
+print(">>> Second If");
+// if then else
+if true:
+    print("\t2nd if true, i >= 5, i =", i);
+else:
+    print("\t2nd if false, i >= 5, i =", i);
+endif;
+// while and if 
+print(">>> First while i < 5");    
+i = 1;
+while false:
+    print("\ttop of while, i=", i);
+    if false:
+        print("\twhile first if true i<3, i=", i);
+        i = i + 2;
+        if false:
+             print("\t\twhile inner if true ... wrong!");
+        else:
+             print('\t\twhile inner if false, loc!=\'TX\', loc is', loc);
+        endif;
+    else:
+        print("\twhile first if false i<3, i=", i);
+        if true:
+             print("\t\twhile 2nd inner if true loc==\'TX\', loc is", loc);
+             i = i + 1;
+        else:
+             print("\t\twhile 2nd inner if false ... wrong");
+             i = i + 10;
+        endif;
+        print("\twhile first if false after inner if");
+    endif;
+    print("\tbottom of while, i=", i);
+endwhile;
+print("\tAfter first while");
+
+// nested while loops
+print(">>> Second while i < 5 ... with nested while");
+i = 1;
+Int j;
+Bool bFlag;
+bFlag = T;
+while false:
+    j = i;
+    print("\ttop of while, i=", i, "j=", j);
+    print("\t>>> Inner while j <= 3");
+    while  true:
+        print("\t\tinner while, j=", j);
+        j = j + 1;
+    endwhile;
+    bFlag = F;
+    print("\tbottom of while, i=", i, "j=", j);
+    i = i + 1;
+endwhile;
+print("\tAfter outer while");

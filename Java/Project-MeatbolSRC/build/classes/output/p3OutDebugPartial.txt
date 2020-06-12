@@ -1,0 +1,206 @@
+p3InputDebug.txt 
+... Assign result into 'name' is 'Anita Goodgrade'
+... Assign result into 'weird' is '	TX	Texas
+'
+... Assign result into 'loc' is 'TX'
+>>> Checking datatype results based on left operand 
+ 19 pi = 3.14;
+ 20 Float area;
+... Assign result into 'pi' is '3.14'
+ 21 Float radius2;
+ 22 Int radius;
+ 23 radius = 8;
+ 24 radius2 = radius ^ 2;  // square the radius
+... Assign result into 'radius' is '8'
+ 25 print("\t1. area all float");
+... Assign result into 'radius2' is '64.0'
+ 26 area = pi * radius2;
+	1. area all float 
+ 27 print("\tradius="
+... Assign result into 'area' is '200.96'
+ 28       ,  radius
+ 29       ,  "radius2="
+ 30       ,  radius2
+ 31       ,  "area="
+ 32       ,  area);
+ 33 Int irad2;
+	radius= 8 radius2= 64.0 area= 200.96 
+ 34 irad2 = radius ^ 2;
+ 35 print("\t2. area using int radius as left operand");
+... Assign result into 'irad2' is '64'
+ 36 area = irad2 * pi;
+	2. area using int radius as left operand 
+ 37 print("\tradius=", radius, "irad2=", irad2, "area=", area);
+... Assign result into 'area' is '192.0'
+ 38 Float circum;
+	radius= 8 irad2= 64 area= 192.0 
+ 39 Float twoPi;
+ 40 print("\t3. circumference using twoPi as float * int");
+ 41 twoPi = pi * 2;
+	3. circumference using twoPi as float * int 
+ 42 circum = twoPi * radius;
+... Assign result into 'twoPi' is '6.28'
+ 43 print("\tradius=", radius, "twoPi=", twoPi, "circum=", circum);
+... Assign result into 'circum' is '50.24'
+ 44 print("\t4. circumference using twoPi as int * float");
+	radius= 8 twoPi= 6.28 circum= 50.24 
+ 45 twoPi = 2 * pi;
+	4. circumference using twoPi as int * float 
+ 46 circum = twoPi * radius;
+... Assign result into 'twoPi' is '6.0'
+ 47 print("\tradius=", radius, "twoPi=", twoPi, "circum=", circum);
+... Assign result into 'circum' is '48.0'
+ 48 
+ 49 // Minus stuff
+ 50 debug Assign off;
+	radius= 8 twoPi= 6.0 circum= 48.0 
+ 51 debug Expr on;
+ 52 debug Stmt off;
+>> Minus test, A= 10 B= 6 D= 25.0 
+... 25.0 - 10 is 15.0
+D-A= 15.0 
+-A= -10 
+-D= -25.0 
+A=-B = -6 
+>>> First If 
+>ifStmt: if loc == "TX": // check for TX
+... TX == TX is T
+	loc is TX 
+... 0 + 1 is 1
+	Done with first if 
+>>> Second If 
+>ifStmt: if i >= 5:
+... 1 >= 5 is F
+	2nd if false, i >= 5, i = 1 
+>>> First while i < 5 
+ 92 while i < 5:
+>whileStmt: while i < 5:
+ 93     print("\ttop of while, i=", i);
+... 1 < 5 is T
+ 94     if i < 3:
+	top of while, i= 1 
+>ifStmt:     if i < 3:
+ 95         print("\twhile first if true i<3, i=", i);
+... 1 < 3 is T
+ 96         i = i + 2;
+	while first if true i<3, i= 1 
+ 97         if loc != "TX":
+... 1 + 2 is 3
+>ifStmt:         if loc != "TX":
+ 98              print("\t\twhile inner if true ... wrong!");
+... TX != TX is F
+ 99         else:
+100              print('\t\twhile inner if false, loc!=\'TX\', loc is', loc);
+101         endif;
+		while inner if false, loc!='TX', loc is TX 
+102     else:
+103         print("\twhile first if false i<3, i=", i);
+104         if loc=="TX":
+105              print("\t\twhile 2nd inner if true loc=='TX', loc is", loc);
+106              i = i + 1;
+107         else:
+108              print("\t\twhile 2nd inner if false ... wrong");
+109              i = i + 10;
+110         endif;
+111         print("\twhile first if false after inner if");
+112     endif;
+113     print("\tbottom of while, i=", i);
+114 endwhile;
+	bottom of while, i= 3 
+115 debug Stmt off;
+ 92 while i < 5:
+ 93     print("\ttop of while, i=", i);
+... 3 < 5 is T
+ 94     if i < 3:
+	top of while, i= 3 
+>ifStmt:     if i < 3:
+ 95         print("\twhile first if true i<3, i=", i);
+... 3 < 3 is F
+ 96         i = i + 2;
+ 97         if loc != "TX":
+ 98              print("\t\twhile inner if true ... wrong!");
+ 99         else:
+100              print('\t\twhile inner if false, loc!=\'TX\', loc is', loc);
+101         endif;
+102     else:
+103         print("\twhile first if false i<3, i=", i);
+104         if loc=="TX":
+	while first if false i<3, i= 3 
+>ifStmt:         if loc=="TX":
+105              print("\t\twhile 2nd inner if true loc=='TX', loc is", loc);
+... TX == TX is T
+106              i = i + 1;
+		while 2nd inner if true loc=='TX', loc is TX 
+107         else:
+... 3 + 1 is 4
+108              print("\t\twhile 2nd inner if false ... wrong");
+109              i = i + 10;
+110         endif;
+111         print("\twhile first if false after inner if");
+112     endif;
+	while first if false after inner if 
+113     print("\tbottom of while, i=", i);
+114 endwhile;
+	bottom of while, i= 4 
+115 debug Stmt off;
+ 92 while i < 5:
+ 93     print("\ttop of while, i=", i);
+... 4 < 5 is T
+ 94     if i < 3:
+	top of while, i= 4 
+>ifStmt:     if i < 3:
+ 95         print("\twhile first if true i<3, i=", i);
+... 4 < 3 is F
+ 96         i = i + 2;
+ 97         if loc != "TX":
+ 98              print("\t\twhile inner if true ... wrong!");
+ 99         else:
+100              print('\t\twhile inner if false, loc!=\'TX\', loc is', loc);
+101         endif;
+102     else:
+103         print("\twhile first if false i<3, i=", i);
+104         if loc=="TX":
+	while first if false i<3, i= 4 
+>ifStmt:         if loc=="TX":
+105              print("\t\twhile 2nd inner if true loc=='TX', loc is", loc);
+... TX == TX is T
+106              i = i + 1;
+		while 2nd inner if true loc=='TX', loc is TX 
+107         else:
+... 4 + 1 is 5
+108              print("\t\twhile 2nd inner if false ... wrong");
+109              i = i + 10;
+110         endif;
+111         print("\twhile first if false after inner if");
+112     endif;
+	while first if false after inner if 
+113     print("\tbottom of while, i=", i);
+114 endwhile;
+	bottom of while, i= 5 
+115 debug Stmt off;
+ 92 while i < 5:
+ 93     print("\ttop of while, i=", i);
+... 5 < 5 is F
+ 94     if i < 3:
+ 95         print("\twhile first if true i<3, i=", i);
+ 96         i = i + 2;
+ 97         if loc != "TX":
+ 98              print("\t\twhile inner if true ... wrong!");
+ 99         else:
+100              print('\t\twhile inner if false, loc!=\'TX\', loc is', loc);
+101         endif;
+102     else:
+103         print("\twhile first if false i<3, i=", i);
+104         if loc=="TX":
+105              print("\t\twhile 2nd inner if true loc=='TX', loc is", loc);
+106              i = i + 1;
+107         else:
+108              print("\t\twhile 2nd inner if false ... wrong");
+109              i = i + 10;
+110         endif;
+111         print("\twhile first if false after inner if");
+112     endif;
+113     print("\tbottom of while, i=", i);
+114 endwhile;
+115 debug Stmt off;
+	After first while 
