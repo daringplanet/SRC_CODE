@@ -1,7 +1,11 @@
-// Main.h
-//
-// This file is the main header file for the CS3843 Encrypt/Decrypt project
-//
+/* Main.h
+Authors:
+  John Ortiz
+  William Lippard
+
+Description:
+  This file is the main header file for the Encrypt/Decrypt project
+*/
 
 // Include Files
 #include <windows.h>
@@ -40,5 +44,3 @@ extern int gNumRounds;
 
 extern unsigned char gEncodeTable[256];
 extern unsigned char gDecodeTable[256];
-
-

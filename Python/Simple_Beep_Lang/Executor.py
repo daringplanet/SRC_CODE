@@ -48,7 +48,7 @@ class Executor:
         self.v = v
         self.totalLinesExe = 0
 
-    #ExecuteLines will parse through a list of lines that the 
+    #ExecuteLines will parse through a list of lines that the
     #obj contains and executes the lines
     def executeLines (self):
         self.totalLinesExe += 1 #keeps track of all lines Executed
@@ -60,10 +60,10 @@ class Executor:
             return None
         if self.v: #checks to see if the -v option is marked
             print("executing line:", self.currentLine, self.lineList[self.currentLine])
-        self.linesExe += 1
 
+        self.linesExe += 1
         #while loop checking for any blank lines and skipping them
-        while self.lineList[self.currentLine] == "": 
+        while self.lineList[self.currentLine] == "":
             self.currentLine += 1
             if self.currentLine >= len(self.lineList):
                 return None
@@ -87,7 +87,7 @@ class Executor:
             return True
         if tokenM[0] == 'PRINT':
 
-            self.printState() 
+            self.printState()
             self.currentLine += 1
 
             return True
@@ -111,9 +111,9 @@ class Executor:
             return True
         return None
 
-    
-    #assignState    
-    #the purpose of this method is to determine if the assign statemnet is valid and 
+
+    #assignState
+    #the purpose of this method is to determine if the assign statemnet is valid and
     #execute the statement and rechord the data
     #lenth is a var to get the length of tokens for bounds checking for
         #a valid assign statement
@@ -125,7 +125,7 @@ class Executor:
 
         tokens = self.lineList[self.currentLine].split()
 
-        lenth = len(tokens) 
+        lenth = len(tokens)
         if lenth <3 or lenth == 4 or lenth > 5: #checks bounds, see description
             raise TooFewOperands("*** line=", seelf.lineList[self.currentLine], "***" )
         if lenth == 3: #routine for if it is a 3 length assign statement
@@ -142,8 +142,8 @@ class Executor:
                 raise InvalidExpression("*** line=", self.lineList[self.currentLine], "***")
 
 
-    #routine for if it is a 5 length assign statement 
-        result = tokens[1].upper() 
+    #routine for if it is a 5 length assign statement
+        result = tokens[1].upper()
         op = tokens[2]#see description
         var1 = tokens[3]#see description
         var2 = tokens[4]#see description
@@ -152,7 +152,7 @@ class Executor:
         if result in self.varTypeD: #check to see if the result key is valid
             #checking the differnt operators at this level
             if op == "*":
-                    
+
                 if var2.isdecimal():
                     self.varValueD[result] = self.varValueD[var1.upper()] * int(var2)
                 elif var2.upper() in self.varValueD:
@@ -176,7 +176,7 @@ class Executor:
                        raise  InvalidValueType("Atleast one var is not a number, statement:",  self.lineList[self.currentLine])
                 else:
                     raise InvalidValueType("Atleast one var is not a number, statement:",  self.lineList[self.currentLine])
-               
+
             elif op == "-":
                 if var1.isdecimal():
                     if var2.isdecimal():
@@ -204,14 +204,14 @@ class Executor:
                 else:
                     raise InvalidValueType("Atleast one var is not a number, statement:",  self.lineList[self.currentLine])
 
-                
+
 
             else:
                 raise InvalidValueType("Atleast one var is not a number, statement:",  self.lineList[self.currentLine])
             return
 
 
-    
+
     #label
     #handels all labels in the BEEP source code
     #tokens is a list of words from a BEEP statement
@@ -254,7 +254,7 @@ class Executor:
     def compare(self):
         print("Inside compare")
         line  = self.lineList[self.currentLine].upper()
-        line = re.sub(".*IF", "", line, 1) #takes out not important information 
+        line = re.sub(".*IF", "", line, 1) #takes out not important information
         line = re.sub(".*if", "", line, 1)
         tokens = line.split()
         print("tokens=", tokens)
@@ -275,14 +275,14 @@ class Executor:
         elif op2.isdecimal() == None:
             raise InvalidValueType("Atleast one var is not a number, statement:",  self.lineList[self.currentLine])
 
-        try: #try and compare the two operands and got to the new label if the 
+        try: #try and compare the two operands and got to the new label if the
              #label is defined
 
             if comp == ">":
                 if int(op1) > int(op2):
                     print("Inside If >")
                     self.currentLine = self.labelD[label]-1
-                    self.executeLine()
+                    self.executeLines()
             elif comp == ">=":
                 if int(op1) >= int(op2):
 
@@ -305,7 +305,7 @@ class Executor:
     def printState(self):
 
         line = self.lineList[self.currentLine]
-        line = re.sub(".*PRINT", "", line, 1) 
+        line = re.sub(".*PRINT", "", line, 1)
         tokens = line.split()
         regEx = re.compile(r'\"')
 

@@ -7,7 +7,7 @@ package part2;
 
 /**
  *
- * @author lippa
+ * @author William Lippard
  */
 public class BubbleSort implements Runnable
 {
@@ -16,7 +16,7 @@ public class BubbleSort implements Runnable
     private int end;
     private int start2;
     private int end2;
-    
+
     public BubbleSort(double a[], int start, int end)
     {
         this.dSort = a;
@@ -25,16 +25,16 @@ public class BubbleSort implements Runnable
         this.start2 = -1;
         this.end2 = -1;
     }
-    
+
 
     @Override
-    public void run() 
+    public void run()
     {
         //System.out.println("*******RUN:");
         //sort the array using bubble sort.
         int i, j;
         double temp;
-        
+
         for(i=this.start; i <= this.end; i++)
         {
             for(j = this.start; j< this.end; j++)
@@ -47,8 +47,8 @@ public class BubbleSort implements Runnable
                 }
             }
         }
-        
+
         return;
     }
-    
+
 }

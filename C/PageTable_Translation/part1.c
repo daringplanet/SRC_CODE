@@ -1,6 +1,8 @@
 
 
-
+/*
+Author: William Trace Lippard
+*/
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -19,7 +21,7 @@ int main(int argc, char *argv[])
         perror("Invaild number of command arguments.");
         return -1;
     }
-    
+
     //printf("Hello World. I am launched by command %s\n", argv[0]);
     //printf("input file = %s, output file = %s\n", argv[1], argv[2]);
 
@@ -42,13 +44,13 @@ int main(int argc, char *argv[])
         perror("Input file is NULL. Can not read file");
         return -1;
     }
-    
+
     if((output = open(argv[2], O_WRONLY)) == -1)
     {
         perror("Output file is NULL. Can not write to file");
         return -1;
     }
-    
+
     if(argc == 4)
     {
         if(strcmp(argv[3], "-v"))
@@ -78,13 +80,13 @@ int main(int argc, char *argv[])
         //if we are at the end off the file
         if (bytesread <= 0)
             break;
-        
+
 
         //printf("current bytesread = %d, buf=%x\n", bytesread, buf);
 
         //copying over the buffer
         outbuf = buf;
-        
+
         //printf("Current buf = %x\n", buf);
         //getting the displacement, correct
         displacement = buf & disAnder;
@@ -131,7 +133,7 @@ int main(int argc, char *argv[])
             //advances the buffer location.
             outbuf += byteswritten;
         }
-        
+
         //if there are no more bytes break TRUE loop.
         if (byteswritten == -1)
             break;
@@ -145,6 +147,3 @@ int main(int argc, char *argv[])
     //printf("REaching\n");
     return 0;
 }
-
-
-

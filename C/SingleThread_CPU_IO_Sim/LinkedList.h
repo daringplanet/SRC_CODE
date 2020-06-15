@@ -1,6 +1,8 @@
 /************************************************************
 LinkedList.h
 
+Author: William Trace Lippard
+
 Purpose:
     Define constants used in the project
     Struct definitions for a general Linked List.
@@ -40,7 +42,7 @@ typedef struct NodeDL
     //struct NodeDL *pPrev;
 } NodeDL;
 
-//Typedef for a doubly linked list implementation.  
+//Typedef for a doubly linked list implementation.
 //Contains a pointer to the first node in the list and the last node in the list (pHead and pFoot respectively).
 typedef struct
 {
@@ -74,8 +76,8 @@ NodeDL *allocateNode(PCB_st value);
 void append(LinkedList list, PCB_st value);
 
 
-	
-	
+
+
 
 /************************************************
 LinkedList
@@ -123,8 +125,8 @@ Purpose: allocate new node with value
 *********************************************/
 NodeDL *allocateNode(PCB_st value)
 {
-    NodeDL *newNode = (NodeDL *)malloc(sizeof(NodeDL));//creates the space 
-                                                //for the node and call the 
+    NodeDL *newNode = (NodeDL *)malloc(sizeof(NodeDL));//creates the space
+                                                //for the node and call the
                                                 //node pointer newNode
 
     newNode->pcb.procID = value.procID;
@@ -133,10 +135,10 @@ NodeDL *allocateNode(PCB_st value)
     int i;
     for(i=0; i<8; i++)
         newNode->pcb.reg[i] = value.reg[i];
-    
+
     newNode->pcb.queueEnterClock = 0;
     newNode->pcb.waitTime = 0;
-    
+
     newNode->pNext=NULL; //sets the nodes pNext to NULL
     //newNode->pPrev = NULL; //sets the nodes pPrev to NULL
     return newNode; //returns the newNode
@@ -150,7 +152,7 @@ Purpose: insert a element into the linked list
 ******************************************/
 void append(LinkedList list, PCB_st value)
 {
-    NodeDL *newNode = allocateNode(value); //creates a new node and copies 
+    NodeDL *newNode = allocateNode(value); //creates a new node and copies
                                            //the value int the nodes element
 
     if(list->pHead == NULL)
@@ -159,12 +161,12 @@ void append(LinkedList list, PCB_st value)
         list->pFoot=newNode;
         return;
     }
-    list->pFoot->pNext = newNode; //otherwise make the end of the 
+    list->pFoot->pNext = newNode; //otherwise make the end of the
                                   //list point to the new node
-    list->pFoot = newNode; //then update the end of the list to the 
+    list->pFoot = newNode; //then update the end of the list to the
                             //newNode since it is at the end now
 
-    return; 
+    return;
 }
 
 
@@ -213,7 +215,7 @@ Purpose:
     to append a new node in SJF priority
 Params:
     list - LinkedList to append new node
-    value - PCB_st that contains values for 
+    value - PCB_st that contains values for
             the new node
 Returns:
     void
@@ -234,7 +236,7 @@ void SJFappend(LinkedList list, PCB_st value)
     //set current to head
     current = list->pHead;
 
-    //while the current node is not null and the new cpu burst is 
+    //while the current node is not null and the new cpu burst is
     //biggger than the current cpu burst, keep advancing through the list
     while(current != NULL && value.CPUburst > current->pcb.CPUburst)
     {
@@ -266,7 +268,7 @@ void SJFappend(LinkedList list, PCB_st value)
     newNode->pNext = current;
 
     //if there was a previous node before current
-    if(prev != NULL) 
+    if(prev != NULL)
         prev->pNext = newNode; //make it point to new node
 
 
@@ -311,7 +313,7 @@ Special Notes:
 ***********************************************/
 void PRappend(LinkedList list, PCB_st value)
 {
-    
+
     NodeDL *newNode = allocateNode(value); //creates a new node and copies
     NodeDL *current = NULL;                                        //the value int the nodes element
     NodeDL *prev = NULL;
@@ -355,12 +357,3 @@ void PRappend(LinkedList list, PCB_st value)
 
     return;
 }
-
-
-
-
-
-
-
-
-

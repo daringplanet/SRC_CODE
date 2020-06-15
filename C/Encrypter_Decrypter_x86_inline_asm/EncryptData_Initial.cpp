@@ -1,5 +1,9 @@
 // EncryptData.cpp
-//
+/*
+Authors:
+  John Ortiz
+  William Lippard
+*/
 // This file uses the input data and key information to encrypt the input data
 //
 
@@ -35,8 +39,8 @@ int encryptData(char *data, int dataLength)
 	// Also, you cannot use a lot of global variables - work with registers
 
 	__asm {
-	
-		
+
+
 		//clearing ecx to create a counter
 			xor ecx, ecx
 
@@ -50,25 +54,25 @@ START :
 
 			//preserves the number of rounds
 			push ecx
-			
+
 			mov edx, data //gets data
 			mov ebx, edx  //moves data into ebx
 			add ebx, dataLength
 			//setting up the hop count
-			xor eax, eax   
+			xor eax, eax
 			mov ah, byte ptr[esi + 2 + ecx * 4] //
 			mov al, byte ptr[esi + 3 + ecx * 4]
 			cmp ax, 0
 			je NEWHOP
 			mov resulti, eax
 CN:	//getting the index
-			xor eax, eax		
+			xor eax, eax
 			mov ah, byte ptr[esi + ecx*4]
 			mov al, byte ptr[esi + ecx*4 + 1]
-			
-		
-		
-	
+
+
+
+
 
 NEXT:  //Encyrpting the data with the hash
 			xor ecx, ecx
@@ -79,10 +83,10 @@ NEXT:  //Encyrpting the data with the hash
 			inc edx
 			cmp edx, ebx  //checks to see if we're done encrypting data
 			je EDONE
-			
+
 			add eax, resulti  //update by the hop count
 			cmp eax, 65537  //check boundary conditions
-			jb NEXT //repeat until done 
+			jb NEXT //repeat until done
 			sub eax, 65537
 			jmp NEXT
 
@@ -90,7 +94,7 @@ NEXT:  //Encyrpting the data with the hash
 
 		EDONE :
 
-		
+
 			//setting up for bit manipulation(DACBE)
 			mov ebx, dataLength
 			lea esi, gkey
@@ -117,9 +121,9 @@ NEXT:  //Encyrpting the data with the hash
 			xor ebx, ebx
 			movzx eax, byte ptr[edi + ecx]
 			mov dl, al //gets one byte of the data
-			and dl, 0xf0 
+			and dl, 0xf0
 			clc
-			rol dl, 1 //rotating the high nibble left 
+			rol dl, 1 //rotating the high nibble left
 			jc RH
 		RO1 :
 
@@ -130,14 +134,14 @@ NEXT:  //Encyrpting the data with the hash
 			jc RL
 			jmp DDONE
 
-			//checking to see if there was an end bit that was rotated out 
+			//checking to see if there was an end bit that was rotated out
 		RH :
 		and dl, 0xf0
 			or dl, 0x10
 			jmp RO1
 
 		RL :
-		//also checking for end bit but on opposite side 
+		//also checking for end bit but on opposite side
 		and bl, 0x0f
 			or bl, 0x08
 			jmp DDONE
@@ -152,7 +156,7 @@ NEXT:  //Encyrpting the data with the hash
 
 		A :
 		movzx eax, byte ptr[edi + ecx]
-			rol al, 1 //rotating the bit to to the left 
+			rol al, 1 //rotating the bit to to the left
 			mov byte ptr[edi + ecx], al
 
 
@@ -161,12 +165,12 @@ NEXT:  //Encyrpting the data with the hash
 		movzx eax, byte ptr[edi + ecx]
 			xor ebx, ebx
 			xor edx, edx
-			//counter to move all the bits 
+			//counter to move all the bits
 			mov edx, 7
 			//loop to rotate all bits until the order is reversed
 		LOOP1:
 		sal al, 1
-			rcr bl, 1  //rotating a bit through the carry 
+			rcr bl, 1  //rotating a bit through the carry
 			test edx, edx
 			je CDONE
 			dec edx
@@ -187,12 +191,12 @@ NEXT:  //Encyrpting the data with the hash
 
 
 
-			and dl, 0xf0 //preserving one of the bits 
-			ror dl, 4  //rotating the bit to the right 4 times 
+			and dl, 0xf0 //preserving one of the bits
+			ror dl, 4  //rotating the bit to the right 4 times
 
 
 			and bl, 0x0f //preserving the opposite bit
-			ror bl, 4 //rotating it again 4 times 
+			ror bl, 4 //rotating it again 4 times
 
 
 			xor eax, eax
@@ -208,7 +212,7 @@ NEXT:  //Encyrpting the data with the hash
 		movzx eax, byte ptr[edi + ecx]
 			lea esi, gEncodeTable //gets first value of the table
 			movzx al, [esi + eax] //
-			mov byte ptr[edi + ecx], al  //swap data with the new bit from ecnrytpion table 
+			mov byte ptr[edi + ecx], al  //swap data with the new bit from ecnrytpion table
 
 
 
@@ -234,7 +238,7 @@ NEWHOP :  //if its 0 then sets the hop counts to FFFF
 
 	}
 
-	
+
 
 	return resulti;
 } // encryptData

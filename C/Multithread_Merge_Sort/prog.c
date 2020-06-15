@@ -1,7 +1,4 @@
-
-
-
-
+/*created by William Trace Lippard*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,7 +37,7 @@ void *singleSort(void *args);
 
 int main(int argc, char *argv[])
 {
-    
+
     if(argc != 2)
     {
         printf("ERROR: Invalid number of arguments.\n");
@@ -50,7 +47,7 @@ int main(int argc, char *argv[])
     }
 
 
-   
+
     pthread_t tid, tid2, tid3;
 
 
@@ -60,7 +57,7 @@ int main(int argc, char *argv[])
 
     MyStruct leftStruct;
     MyStruct rightStruct;
-    
+
     MyStruct oneStruct;
 
     FinalStruct final;
@@ -69,7 +66,7 @@ int main(int argc, char *argv[])
 
     sscanf(argv[1], "%d", &n);
 
-    
+
     //creates the space for the []
     dSort = (double *)malloc(n * sizeof(double));
     dFinal = (double *)malloc(n * sizeof(double));
@@ -94,7 +91,7 @@ int main(int argc, char *argv[])
     rightStruct.startIndex = n/2;
     rightStruct.endIndex = n-1;
     rightStruct.iCur = rightStruct.startIndex;
-    
+
   //  printf("RIGHT: start = %d end = %d, iCur = %d\n", rightStruct.startIndex, rightStruct.endIndex, rightStruct.iCur);
 
     gettimeofday(&start, NULL);
@@ -104,7 +101,7 @@ int main(int argc, char *argv[])
 
     pthread_join(tid, NULL);
     pthread_join(tid2, NULL);
-    gettimeofday(&stop, NULL);   
+    gettimeofday(&stop, NULL);
 
     unsigned long msSec = (stop.tv_sec - start.tv_sec) * 1000000 + ((stop.tv_usec - start.tv_usec) / 1000);
     unsigned long msDec = (stop.tv_usec - start.tv_usec) % 1000;
@@ -117,14 +114,14 @@ int main(int argc, char *argv[])
     for(i=rightStruct.startIndex; i<=rightStruct.endIndex; i++)
         printf(".\t\t..dSort[%d] = %lf\n", i, dSort[i]);
     */
-    
+
     pthread_create(&tid3, NULL, merge, &final);
 
     pthread_join(tid3, NULL);
 
-    
+
     printf("Sorting is done in %lu.%lums when two threads are used\n", msSec, msDec);
-    
+
     gettimeofday(&start, NULL);
     pthread_create(&tid, NULL, singleSort, &oneStruct);
     pthread_join(tid, NULL);
@@ -155,7 +152,7 @@ void *sort(void *args)
 {
     //printf("withdraw created:");
     MyStruct *sortA = (MyStruct*) args;
-    
+
     int i, j;
     double temp;
     for(i = sortA->startIndex; i <= sortA->endIndex; i++)
@@ -164,7 +161,7 @@ void *sort(void *args)
         for(j = sortA->startIndex; j < sortA->endIndex; j++)
         {
             //printf("j = %d\n", j);
-            
+
             if(dSort[j] > dSort[j+1])
             {
                 //printf("dSort[%d] = %lf >>>>> dSort[%d] = %lf\n", j, dSort[j], j+1, dSort[j+1]);
@@ -211,8 +208,8 @@ void *merge(void *args)
 {
     FinalStruct *final = (FinalStruct*) args;
     int i;
-    
-    
+
+
     for(i=0; i<=final->right->endIndex; i++)
     {
         if(final->left->iCur > final->left->endIndex)
@@ -236,38 +233,7 @@ void *merge(void *args)
             final->right->iCur++;
         }
     }
-    
+
     free(dSort);
     return NULL;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

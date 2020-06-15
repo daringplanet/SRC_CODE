@@ -1,6 +1,8 @@
 
 
-
+/*
+Author: William Trace Lippard
+*/
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -22,8 +24,8 @@ int main(int argc, char *argv[])
         perror("Invaild number of command arguments.");
         return -1;
     }
-    
-    
+
+
     int pageHit = 0;
     int pageMiss = 0;
     int dashV = 0;
@@ -50,21 +52,21 @@ int main(int argc, char *argv[])
     int maxPages;
     int maxFrames;
     unsigned long shiftValue;
-    
-    
+
+
     bytesPerPage = atoi(argv[1]);
     logicMemSize = atoi(argv[2]);
     phyMemSize = atoi(argv[3]);
-   
+
     pageSize = (unsigned long) bytesPerPage;
 
     maxPages = logicMemSize / bytesPerPage;
     maxFrames = phyMemSize / bytesPerPage;
     disAnder = 0;
     disAnder = bytesPerPage - 1;
-    
-    
-   
+
+
+
    shiftValue = 0;
    unsigned long copyBytes = 0;
    copyBytes =  bytesPerPage;
@@ -74,21 +76,21 @@ int main(int argc, char *argv[])
         copyBytes/=2;
         shiftValue+=1;
    }
-    
 
-    
+
+
     if((input = open(argv[4], O_RDONLY)) == -1)
     {
         perror("Input file is NULL. Can not read file");
         return -1;
     }
-    
+
     if((output = open(argv[5], O_WRONLY)) == -1)
     {
         perror("Output file is NULL. Can not write to file");
         return -1;
     }
-    
+
     if(argc == 7)
     {
         if(strcmp(argv[6], "-v"))
@@ -108,7 +110,7 @@ int main(int argc, char *argv[])
     {
         //update the clock.
         phyMgr->iClock++;
-        
+
 
 
         //reades 8 bytes at a time and stores them into the buf. This also
@@ -118,12 +120,12 @@ int main(int argc, char *argv[])
         //if we are at the end off the file
         if (bytesread <= 0)
             break;
-        
+
 
 
         //copying over the logical address for printing purposes
         outbuf = buf;
-        
+
         //getting the displacement
         displacement = buf & disAnder;
         //printf("------>displacement = %x\n", displacement);
@@ -132,7 +134,7 @@ int main(int argc, char *argv[])
         pageIndex = buf >> shiftValue;
 
 
-        
+
         //range checking
         if (pageIndex < 0 || pageIndex > maxPages)
         {
@@ -146,9 +148,9 @@ int main(int argc, char *argv[])
         if(pageMgr->pages[pageIndex].vbit != 1)
         {
             pageMiss+=1;
-            
+
             //try and insert into free spot
-            newFrameIndex = insertPhy(phyMgr, displacement); 
+            newFrameIndex = insertPhy(phyMgr, displacement);
             //if there are no physical frames
             if(newFrameIndex == -1)
             {
@@ -163,20 +165,20 @@ int main(int argc, char *argv[])
                 phyAddress += displacement;
                 physical = phyAddress;
                 //insert new frame.
-                insertFrame(phyMgr, newFrameIndex, phyAddress); 
+                insertFrame(phyMgr, newFrameIndex, phyAddress);
             }
-            
+
             pageMgr->pages[pageIndex].frameId = newFrameIndex;
             //set the page valid bit to valid.
             pageMgr->pages[pageIndex].vbit = 1;
-        } 
+        }
         else
         {
             pageHit+=1;
             phyMgr->phyFrames[newFrameIndex].iFrameTime = phyMgr->iClock;
         }
 
-        
+
 
         if(dashV)
             printf("%d. PageID: %x\tLogic: %x\tPhysic: %x\n", (phyMgr->iClock -1), pageIndex, outbuf, phyMgr->phyFrames[newFrameIndex].phyAddress);
@@ -204,7 +206,7 @@ int main(int argc, char *argv[])
             //advances the buffer location.
             outbuf += byteswritten;
         }
-        
+
         //if there are no more bytes break TRUE loop.
         if (byteswritten == -1)
             break;
@@ -226,5 +228,3 @@ int main(int argc, char *argv[])
     close(output);
     return 0;
 }
-
-

@@ -1,8 +1,6 @@
-
-
-
-
-
+/*
+Author: William Trace Lippard
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +12,7 @@
 
 /*********************************
 typedef for the Element struct i
-which constains a c string to 
+which constains a c string to
 store pages
 
 **********************************/
@@ -33,7 +31,7 @@ typedef struct
 {
     Element* pages;
     int iMax;
-    
+
 }PageMgr;
 
 
@@ -45,7 +43,7 @@ void printPageMgr(PageMgr *pageMgr)
         //printf("i = %x\n", i);
        // printf("************* i = %x vbit = %d\n", i, pageMgr->pages[i].vbit);
         if(pageMgr->pages[i].vbit == 1)
-            printf("\t\t...pageIndex = [%x],\tframeIndex = [%x],\tvbit = [%d]\n", i, 
+            printf("\t\t...pageIndex = [%x],\tframeIndex = [%x],\tvbit = [%d]\n", i,
                 pageMgr->pages[i].frameId, pageMgr->pages[i].vbit);
     }
     return;
@@ -60,14 +58,14 @@ PageMgr* createPageMgr(int max)
     //printf("CREATpageMgr:\n");
     PageMgr *newPageMgr = malloc(1 * sizeof(PageMgr));
     newPageMgr->pages = (Element *) malloc(max * sizeof(Element));
-    
+
     int i;
     //set all the valid bits to 0
     for(i=0; i<newPageMgr->iMax; i++)
         newPageMgr->pages[i].vbit = 0;
 
-    newPageMgr->iMax = max;    
-    
+    newPageMgr->iMax = max;
+
     return newPageMgr;
 
 }
@@ -97,7 +95,7 @@ void deValidatePageIndex(PageMgr *pageMgr, unsigned long frameIndex)
                 //printf("\t\t...pageIndex = %x\n", i);
                 pageMgr->pages[i].vbit = 0;
                 //printf("pageIndex[%x] vbit = %d\n", i, pageMgr->pages[i].vbit);
-            
+
                // printf("END: deValidatePageIndex\n");
                 return;
             }
@@ -107,4 +105,3 @@ void deValidatePageIndex(PageMgr *pageMgr, unsigned long frameIndex)
     //printf("END: deValidatePageIndex\n");
     return;
 }
-

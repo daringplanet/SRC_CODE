@@ -1,6 +1,6 @@
 package bank;
 /**
- * @author William Lippard, aju722
+ * @author William Lippard
  */
 import java.util.*;
 
@@ -16,10 +16,10 @@ private String bankName;
  */
 	public Bank(String bankName){
 		this.bankName = bankName;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * adds a new account
 	 * @param name String of the name of the owner of the account
@@ -28,7 +28,7 @@ private String bankName;
 	public void addAccount(String name, double balance){
 		Account newAccount = new Account(name, accounts.size()+1, balance);
 		accounts.add(newAccount);
-		
+
 	}
 	/**
 	 * adds a new account
@@ -46,7 +46,7 @@ private String bankName;
 		temp+= "Bank:" + this.bankName + "\n";
 		temp+= this.accounts.toString() + "\n";
 		return temp;
-		
+
 	}
-	
+
 }

@@ -1,5 +1,5 @@
-/* //
-    Assignment 1, Written by William Lippard, aju722
+/* 
+     Written by William Lippard
 */
 
 #include <stdio.h>
@@ -14,16 +14,16 @@
 
 /**********main****************
 Purpose:
-    This is the main driving function for 
+    This is the main driving function for
     wordcount.c. This will create a
     process for each file that prints
-    out the word count for that file, 
+    out the word count for that file,
     and once all the processes end,
-    the driver will then let the user know 
+    the driver will then let the user know
     that all files were counted.
 Parameters:
     argc - int that stores the number of command arguemtns
-    
+
     argv - *char[] that store an array of string
            that represent command arguments.
 
@@ -33,9 +33,9 @@ int main(int argc, char *argv[])
     if(argc < 2) //if there are no file provided
     {
         printf("ERROR: No files provided in arguments\n");
-        return -1; 
+        return -1;
     }
-    
+
     pid_t cpid[argc-1]; //create an array of pid numbers
     int i; //loop var
     FILE *fp; //treverse file var
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     {
         //create a new process
         cpid[i-1] = fork();
-    
+
         if(cpid[i-1] < 0) //if the creating of the new process faild
         {
             printf("ERROR: did not create new fork\n");
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
             fclose(fp); //close file
             return 0; //close program
         }
-        
+
         if(cpid > 0) //if we are the parent
             wait(NULL); //wait until the child gets done
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
     //once all the files have been counted, let the user know
     printf("All %d files have been counted!\n", argc-1);
-    
+
 
     return 0;
 }
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
 /***********************countWords*************
 Purpose:
-    this function read a file and count the number of 
+    this function read a file and count the number of
     words inside the given file.
 Params:
     fp - FILE pointer to a file that is already in read mode
@@ -106,23 +106,3 @@ void countWords(FILE *fp, char *fileName)
 
     return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 
-//#include "errExit.c"
+/*Written by William Trace Lippard*/
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,8 +13,8 @@
 
 
 int main( int argc, char *argv[]){
-    
-    
+
+
     char *temp, *temp2;
 
     if(argc < 2  )
@@ -26,7 +26,7 @@ int main( int argc, char *argv[]){
         temp = "00";
         temp2 = "00";
     }
-        
+
     if(argc == 2)
         regLS(argv[1]);
    else if( argc == 4){
@@ -36,23 +36,23 @@ int main( int argc, char *argv[]){
             alPrint(argv[1]);
         else
             errExit2("Incorret flags\n");
-            
-    
+
+
     } else if(temp[1] == 'a')
         allPrint(argv[1]);
 
     else if(temp[1] == 'l'){
       longPrint(argv[1]);
    } else
-         errExit2("Incorret flags\n"); 
-   
-   
+         errExit2("Incorret flags\n");
+
+
    return 0;
     }
 
 
 void longPrint(char *directory){
-    
+
     DIR *pDir;
     struct dirent *pDirent;
     pDir = opendir(directory);
@@ -62,7 +62,7 @@ void longPrint(char *directory){
         errExit2("Could not open '%s'\n", directory);
 
     printf("%s :\n", directory);
-              
+
      char *temp;
      char *file;
     while((pDirent = readdir(pDir)) != NULL){
@@ -75,7 +75,7 @@ void longPrint(char *directory){
             file = strcat(temp2, pDirent->d_name);
             struct stat statsBuf;
             int check = stat(file, &statsBuf);
-            if(check < 0 ) 
+            if(check < 0 )
                 errExit2("Problem reading '%s' stats\n", file);
 
 
@@ -87,26 +87,26 @@ void longPrint(char *directory){
             printf("    %s F %ld blks %ld bytes\n", pDirent->d_name, statsBuf.st_blocks, statsBuf.st_size);
         else if(S_ISDIR(statsBuf.st_mode))
             printf("    %s D %ld blks %ld bytes\n", pDirent->d_name, statsBuf.st_blocks, statsBuf.st_size);
-        else 
+        else
             printf("    %s L %ld blks %ld bytes\n", pDirent->d_name, statsBuf.st_blocks, statsBuf.st_size);
 
         *file = NULL;
 
         }
-        
+
         }
-                          
+
     closedir(pDir);
     return;
 
-    
-    
+
+
     }
 
 
 
 void alPrint(char *directory){
-    
+
      DIR *pDir;
      struct dirent *pDirent;
      pDir = opendir(directory);
@@ -115,7 +115,7 @@ void alPrint(char *directory){
      if(pDir == NULL)
          errExit2("Could not open '%s'\n", directory);
 
-    
+
 
 
 
@@ -144,26 +144,26 @@ void alPrint(char *directory){
             printf("    %s F %ld blks %ld bytes\n", pDirent->d_name, statsBuf.st_blocks, statsBuf.st_size);
         else if(S_ISDIR(statsBuf.st_mode))
             printf("    %s D %ld blks %ld bytes\n", pDirent->d_name, statsBuf.st_blocks, statsBuf.st_size);
-        else 
+        else
             printf("    %s L %ld blks %ld bytes\n", pDirent->d_name, statsBuf.st_blocks, statsBuf.st_size);
 
 
         *file = NULL;
-        
-        }   
-    
+
+        }
+
         closedir(pDir);
         return;
 
     }
 
 void regLS(char *directory){
-    
-    
+
+
     DIR *pDir;
     struct dirent *pDirent;
     pDir = opendir(directory);
-    
+
 
     if(pDir == NULL)
         errExit2("Could not open '%s'\n", directory);
@@ -173,7 +173,7 @@ void regLS(char *directory){
 
     char *temp;
     while((pDirent = readdir(pDir)) != NULL){
-        
+
         temp = pDirent->d_name;
         if(temp[0] != '.')
             printf("    %s\n", pDirent->d_name);
@@ -181,7 +181,7 @@ void regLS(char *directory){
 
         closedir(pDir);
         return;
-    
+
     }
 
 
@@ -190,29 +190,29 @@ void regLS(char *directory){
 
 
 void allPrint(char *directory){
-            
+
         DIR *pDir;
         struct dirent *pDirent;
         pDir = opendir(directory);
-          
-           
+
+
         if(pDir == NULL)
             errExit2("Could not open '%s'\n", directory);
-           
-           
+
+
         printf("%s :\n", directory);
-           
+
          char *temp;
          while((pDirent = readdir(pDir)) != NULL){
-               
+
                temp = pDirent->d_name;
                 printf("    %s\n", pDirent->d_name);
          }
-               
+
          closedir(pDir);
            return;
 }
-            
+
 
 
 
@@ -224,7 +224,7 @@ void allPrint(char *directory){
 
 void errExit2(const char szFmt[], ... ) {
     va_list args;               // This is the standard C variable argument list type
-    va_start(args, szFmt);      // This tells the compiler where the variable arguments         
+    va_start(args, szFmt);      // This tells the compiler where the variable arguments
                                 // begins.  They begin after szFmt.
     printf("ERROR: ");
     vprintf(szFmt, args);       // vprintf receives a printf format string and  a
@@ -234,4 +234,3 @@ void errExit2(const char szFmt[], ... ) {
     printf("\n");
     exit(ERROR_PROCESSING);
 }
-

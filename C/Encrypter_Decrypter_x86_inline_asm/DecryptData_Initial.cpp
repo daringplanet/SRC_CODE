@@ -1,5 +1,9 @@
 // DecryptData.cpp
-//
+/*
+Authors:
+  John Ortiz
+  William Lippard
+*/
 // THis file uses the input data and key information to decrypt the input data
 //
 
@@ -10,8 +14,8 @@
 int decryptData(char *data, int dataLength)
 {
 	int resulti = 0;
-	
-	
+
+
 	gdebug1 = 0;					// a couple of global variables that could be used for debugging
 	gdebug2 = 0;					// also can have a breakpoint in C code
 
@@ -27,27 +31,27 @@ __asm {
 
 START2 :
 		xor ecx, ecx
-		
+
 			mov edi, data
 
 
 START :
 		cmp ecx, dataLength
 		jge DONE
-		
+
 
 E://code table swap
-		
-		
-		
+
+
+
 			movzx eax, byte ptr[edi + ecx]
 			lea esi, gDecodeTable//gets first value of the table
 			movzx al, [esi + eax]
-			mov byte ptr[edi + ecx], al//swap data with the new bit from decryption table 
-			
-			
+			mov byte ptr[edi + ecx], al//swap data with the new bit from decryption table
 
-			
+
+
+
 B:   //swapping nibbles
 			xor edx, edx
 			xor ebx, ebx
@@ -57,12 +61,12 @@ B:   //swapping nibbles
 
 
 
-			and dl, 0xf0  //preserving one of the bits 
-			ror dl, 4//rotating the bit to the right 4 times 
+			and dl, 0xf0  //preserving one of the bits
+			ror dl, 4//rotating the bit to the right 4 times
 
 
 			and bl, 0x0f//preserving the opposite bit
-			ror bl, 4//rotating it again 4 times 
+			ror bl, 4//rotating it again 4 times
 
 
 			xor eax, eax
@@ -71,7 +75,7 @@ B:   //swapping nibbles
 			mov byte ptr[edi + ecx], al
 
 
-			
+
 
 
 C:
@@ -79,12 +83,12 @@ C:
 				movzx eax, byte ptr[edi + ecx]
 				xor ebx, ebx
 				xor edx, edx
-				//counter to move all the bits 
+				//counter to move all the bits
 				mov edx, 7
 				//loop to rotate all bits until the order is reversed
 LOOP1:
 				sar al, 1
-				rcl bl, 1 //rotating a bit through the carry 
+				rcl bl, 1 //rotating a bit through the carry
 				test edx, edx
 				je CDONE
 				dec edx
@@ -96,20 +100,20 @@ CDONE :
 
 
 
-				
+
 
 
 
 A:
 		movzx eax, byte ptr[edi + ecx]
-		ror al, 1  //rotating the bit to to the right 
+		ror al, 1  //rotating the bit to to the right
 		mov byte ptr[edi + ecx], al
 
 
 
 
 
-		
+
 
 D:
 		//rotating high nibble right and low nibble left
@@ -135,13 +139,13 @@ RO1 :
 			jmp DDONE
 
 
-RH :  //checking to see if there was an end bit that was rotated out 
+RH :  //checking to see if there was an end bit that was rotated out
 			and dl, 0xf0
 			or dl, 0x80
 			jmp RO1
 
 RL :
-			//also checking for end bit but on opposite side 
+			//also checking for end bit but on opposite side
 			and bl, 0x0f
 			or bl, 0x01
 			jmp DDONE
@@ -152,19 +156,19 @@ DDONE :
 			add eax, edx
 			add eax, ebx
 			mov byte ptr[edi + ecx], al
-			
 
 
 
-			
+
+
 
 
 			inc ecx
 			jmp START
-		
-		
+
+
 NEWHOP:
-	
+
 			mov eax, 0xffff
 			mov resulti, eax
 			jmp CN
@@ -212,11 +216,11 @@ NEXT : //Encyrpting the data with the hash
 
 				add eax, resulti  //update by the hop count
 				cmp eax, 65537  //check boundary conditions
-				jb NEXT//repeat until done 
+				jb NEXT//repeat until done
 				sub eax, 65537
 				jmp NEXT
 
-NOWDONE :  //checking the number of rounds thats left to determine continuation 
+NOWDONE :  //checking the number of rounds thats left to determine continuation
 			mov ecx, gNumRounds
 				dec ecx
 				mov gNumRounds, ecx
@@ -225,8 +229,7 @@ NOWDONE :  //checking the number of rounds thats left to determine continuation
 				mov resulti, 0
 	}
 
-	
+
 
 	return resulti;
 } // decryptData
-

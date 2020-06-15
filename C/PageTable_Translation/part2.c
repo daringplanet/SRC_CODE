@@ -1,4 +1,5 @@
 /***************************
+Author: William Trace Lippard
 
 File Name: part2.c
 Class: Operating Systems
@@ -26,8 +27,8 @@ int main(int argc, char *argv[])
         perror("Invaild number of command arguments.");
         return -1;
     }
-    
-    
+
+
     int pageHit = 0;
     int pageFault = 0;
     int dashV = 0;
@@ -54,13 +55,13 @@ int main(int argc, char *argv[])
         perror("Input file is NULL. Can not read file");
         return -1;
     }
-    
+
     if((output = open(argv[2], O_WRONLY)) == -1)
     {
         perror("Output file is NULL. Can not write to file");
         return -1;
     }
-    
+
     if(argc == 4)
     {
         if(strcmp(argv[3], "-v"))
@@ -79,7 +80,7 @@ int main(int argc, char *argv[])
     {
         //update the clock.
         phyMgr->iClock++;
-        
+
 
 
         //reades 8 bytes at a time and stores them into the buf. This also
@@ -89,7 +90,7 @@ int main(int argc, char *argv[])
         //if we are at the end off the file
         if (bytesread <= 0)
             break;
-        
+
 
 
         //copying over the logical address for printing purposes
@@ -104,7 +105,7 @@ int main(int argc, char *argv[])
         pageIndex = buf >> 7;
 
 
-        
+
         //range checking
         if (pageIndex < 0 || pageIndex > max)
         {
@@ -118,9 +119,9 @@ int main(int argc, char *argv[])
         if(pageMgr->pages[pageIndex].vbit != 1)
         {
             pageFault+=1;
-            
+
             //try and insert into free spot
-            newFrameIndex = insertPhy(phyMgr, displacement); 
+            newFrameIndex = insertPhy(phyMgr, displacement);
             //if there are no physical frames
             if(newFrameIndex == -1)
             {
@@ -134,24 +135,24 @@ int main(int argc, char *argv[])
                 phyAddress = phyAddress << 7;
                 phyAddress += displacement;
                 //insert new frame.
-                insertFrame(phyMgr, newFrameIndex, phyAddress); 
+                insertFrame(phyMgr, newFrameIndex, phyAddress);
             }
-            
+
             pageMgr->pages[pageIndex].frameId = newFrameIndex;
             //set the page valid bit to valid.
             pageMgr->pages[pageIndex].vbit = 1;
-        } 
+        }
         else
         {
             pageHit+=1;
             phyMgr->phyFrames[newFrameIndex].iFrameTime = phyMgr->iClock;
         }
 
-        
+
 
         if(dashV)
-            printf("%d. Page Index: %x\tLogic: %x\tFrame Index: %x\tPhysic: %x\tDisplacement: %x\n", 
-                (phyMgr->iClock -1), pageIndex, outbuf, pageMgr->pages[pageIndex].frameId, 
+            printf("%d. Page Index: %x\tLogic: %x\tFrame Index: %x\tPhysic: %x\tDisplacement: %x\n",
+                (phyMgr->iClock -1), pageIndex, outbuf, pageMgr->pages[pageIndex].frameId,
                 phyMgr->phyFrames[newFrameIndex].phyAddress, displacement);
 
 
@@ -178,7 +179,7 @@ int main(int argc, char *argv[])
             //advances the buffer location.
             outbuf += byteswritten;
         }
-        
+
         //if there are no more bytes break TRUE loop.
         if (byteswritten == -1)
             break;
@@ -202,6 +203,3 @@ int main(int argc, char *argv[])
     close(output);
     return 0;
 }
-
-
-

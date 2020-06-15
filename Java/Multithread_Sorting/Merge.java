@@ -7,11 +7,11 @@ package part2;
 
 /**
  *
- * @author lippa
+ * @author William Lippard
  */
-public class Merge implements Runnable 
+public class Merge implements Runnable
 {
-    
+
     private double dSort[];
     private int lCur;
     private int leftMax;
@@ -19,7 +19,7 @@ public class Merge implements Runnable
     private int rCur;
     private double finalA[];
 
-    
+
     public Merge(double dSort[], int lMax, int rStart, int rMax, double finalA[])
     {
         this.dSort = dSort;
@@ -29,10 +29,10 @@ public class Merge implements Runnable
         this.finalA = finalA;
         this.lCur = 0;
     }
-    
-    
+
+
     @Override
-    public void run() 
+    public void run()
     {
         int i;
         for(i=0; i<this.dSort.length; i++)
@@ -58,8 +58,8 @@ public class Merge implements Runnable
                 this.rCur++;
             }
         }
-        
+
         return;
     }
-    
+
 }

@@ -1,6 +1,6 @@
 /***********************Prog.c**********************
-Operating Systems Assignment 2
-Written by William Lippard, aju722
+Operating Systems Assignment 
+Written by William Lippard,
 
 Purpose:
     To simulate queue algrithems for handling
@@ -15,7 +15,7 @@ Purpose:
 
 /***************main***************************
 Purpose:
-    To validate commandline args and call the 
+    To validate commandline args and call the
     correct alg from the commandline to simulate
     a cpu scheduling.
 Params:
@@ -32,15 +32,15 @@ int main(int argc, char *argv[])
     char *alg = NULL; //to capture the algorthem type
     char *input = NULL; //to cpature the name of the input File
     int quant = 0; //to cature the quamtum if RR alg
-    
-    if(argc < 5 || argc > 7)//checks the number of arguments is in the 
+
+    if(argc < 5 || argc > 7)//checks the number of arguments is in the
     {                       //valid range
         printf("**Invalid number of arguments\n");
-        printf("Usage:prog -alg FIFO -input input1.txt\n");    
+        printf("Usage:prog -alg FIFO -input input1.txt\n");
         return -1;
     }
 
-    
+
     //This first set of if is to validate
     //the first two arguments and assign
     //their values
@@ -98,13 +98,13 @@ int main(int argc, char *argv[])
 
     inFile = fopen(input, "r"); //open the file to read
 
-    if(inFile == NULL) //if it did not open 
+    if(inFile == NULL) //if it did not open
     {
         //error exit with message
         printf("File cannot be opened for reading: '%s'\n", input);
         return -1;
     }
-   
+
 
     //check the alg type and call the
     //appropate alg type.
@@ -145,15 +145,15 @@ Return:
 **************************************************/
 void buildPRQueue(FILE *input, LinkedList list)
 {
-    
+
      PCB_st pcb; //program control block
      int i; //i is used for two purposes
      char line[16]; //to get the line of file
 
     //while there are more lines in the file
-    while(fgets(line, 16, input) != NULL) 
+    while(fgets(line, 16, input) != NULL)
     {
-        i = sscanf(line, "%d %d %d", &pcb.procID, &pcb.procPR, &pcb.CPUburst); 
+        i = sscanf(line, "%d %d %d", &pcb.procID, &pcb.procPR, &pcb.CPUburst);
         //save the amout of scanned result into i for error checking
 
         if(i != 3) //if not valid scan, let the user know
@@ -164,7 +164,7 @@ void buildPRQueue(FILE *input, LinkedList list)
 
         for(i=0; i<8; i++) //coping the registers value as the procID.
             pcb.reg[i] = pcb.procID;
-        
+
         PRappend(list, pcb); //do a Priorty append
 
 
@@ -176,7 +176,7 @@ void buildPRQueue(FILE *input, LinkedList list)
 
 
 /************************buildSJFQueue************
-Purpose:    
+Purpose:
     to build a SJF queue
 Params:
     input - *FILE that is open to read
@@ -232,7 +232,7 @@ void buildQueue(FILE *input, LinkedList list)
     PCB_st pcb;
     int i;
     char line[16];
-    
+
     while(fgets(line, 16, input) != NULL)
     {
         i = sscanf(line, "%d %d %d", &pcb.procID, &pcb.procPR, &pcb.CPUburst);
@@ -242,10 +242,10 @@ void buildQueue(FILE *input, LinkedList list)
             printf("Error with input format.\n");
             exit(-1);
         }
-        
+
         for(i=0; i<8; i++)
             pcb.reg[i] = pcb.procID;
-        
+
         append(list, pcb); //regular append
 
 
@@ -264,7 +264,7 @@ Return:
 void FIFOalg(FILE *input)
 {
     LinkedList list;
-    
+
     list = newLinkedList(); //makes new LinkedList and assing it to list
     printf("\n"); //new line for formating
 
@@ -290,7 +290,7 @@ Purpose:
 Params:
     list - LinkedList to access values and process thier
             cpu times
-    quant - int for the amout of processing time 
+    quant - int for the amout of processing time
 Return:
     void
 ************************************************/
@@ -306,7 +306,7 @@ void processQueueRR(LinkedList list, int quant)
         for(i=0; i<8; i++) //copying the registers over
             list->CPUreg[i] = current->pcb.reg[i];
 
-        
+
         //if the quantum is bigger than current cpu burst
         if(quant > current->pcb.CPUburst)
         {
@@ -314,14 +314,14 @@ void processQueueRR(LinkedList list, int quant)
             list->CLOCK += current->pcb.CPUburst;
             current->pcb.CPUburst = 0;
         }
-        else 
+        else
         {
             //use the quant for the cpu burst time
             list->CLOCK = list->CLOCK + quant;
             current->pcb.CPUburst -= quant;
         }
-        
-        
+
+
         //updating the current wating time.
         current->pcb.waitTime = current->pcb.waitTime + list->CLOCK + current->pcb.queueEnterClock;
 
@@ -333,7 +333,7 @@ void processQueueRR(LinkedList list, int quant)
             printf("Process %d is completed at %d ms\n", current->pcb.procID, list->CLOCK);
             free(current); //free the job
             addQueWait(list); //update the other nodes wait times
-        } 
+        }
         else
         {
             addQueWait(list); //update the other nodes wait time
@@ -415,7 +415,7 @@ Params:
 Retrun:
     void
 Special Notes:
-    Similar to SJFalg 
+    Similar to SJFalg
 ****************************************/
 void PRalg(FILE *in)
 {
@@ -424,7 +424,7 @@ void PRalg(FILE *in)
 
     buildPRQueue(in, list); //build a Pirorty queue
     processQueue(list);
-    
+
     printf("\n");
 
     printf("Average Waiting time = %0.2f ms\n", (double) list->total_wating_time/list->total_job);
@@ -438,7 +438,7 @@ void PRalg(FILE *in)
 
 /*************RRalg*****************
 Purpose:
-    to simulate a round robin cpu 
+    to simulate a round robin cpu
     scheduling alg
 Params:
     input - *FILE input file that is in
@@ -468,5 +468,3 @@ void RRalg(FILE *input, int quant)
     return;
 
 }
-
-
