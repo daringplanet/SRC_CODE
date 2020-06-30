@@ -1,9 +1,0 @@
-Int v1;
-Int v2;
-
-v1 = 10;
-v2 = 2;
-
-v1 ^= v2;
-
-print("Result: ", v1);

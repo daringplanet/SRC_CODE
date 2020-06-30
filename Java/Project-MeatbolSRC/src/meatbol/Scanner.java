@@ -1,6 +1,6 @@
 /**
     Scanner
-    Written by William Lippard, aju722
+    Written by William Lippard
 
     Special Notes:
         There are many print statements left in the code
@@ -24,8 +24,8 @@ import java.util.*;
 
 public class Scanner
 {
-    public final static String delimiters = " \t;:()\'\"=!<>+-*/[]#,^\n\032"; // terminate a token
-    
+    public final static String delimiters = " \t;:()\'\"=!<>+-*/[]#,^\n\032"; // terminate a symbols
+
     public final static String unarySeps = "(,[~;";
 
 
@@ -91,7 +91,7 @@ public class Scanner
         }
 
     }
-    
+
 
 
     /**
@@ -103,7 +103,7 @@ public class Scanner
      */
     public void process() throws Error
     {
-        
+
         //While there are lines
         while(this.scan.hasNextLine())
         {
@@ -123,7 +123,7 @@ public class Scanner
 
         getNextLine(); //loading line
         getToken(); //loading token
-      
+
         return;
     }
 
@@ -137,10 +137,10 @@ public class Scanner
      */
     public void copyTokens()
     {
-        
+
         this.ibLineNr = this.currentToken.iSourceLineNr;
         this.ibColPos = this.currentToken.iColPos;
-        
+
         this.currentToken.bArrayBracket = this.nextToken.bArrayBracket;
         this.currentToken.tokenStr = this.nextToken.tokenStr;
         this.currentToken.subClassif = this.nextToken.subClassif;
@@ -161,8 +161,8 @@ public class Scanner
         //System.out.println(this.currentToken.toString());
         return;
     }
-    
-    
+
+
     /**
      * Copies the nextToken to the currentToken.
      * <p>
@@ -170,10 +170,10 @@ public class Scanner
      */
     public Token copyTokens(Token tk)
     {
-        
+
         Token tkNew = new Token();
-        
-        
+
+
         tkNew.tokenStr = tk.tokenStr;
         tkNew.subClassif = tk.subClassif;
         tkNew.primClassif = tk.primClassif;
@@ -191,7 +191,7 @@ public class Scanner
             tkNew.tkPrec = 0;
         }
         tkNew.bArrayBracket = tk.bArrayBracket;
-        
+
         //System.out.println(this.currentToken.toString());
         return tkNew;
     }
@@ -211,13 +211,13 @@ public class Scanner
      */
     public void rmWhiteSpace()
     {
-        
+
         //used to capture the current char
         char c;
 
         if(!this.bGetLine)
             return;
-        
+
         while(true)
         {
 
@@ -241,7 +241,7 @@ public class Scanner
                 this.iColPos++; //skip over it
             else
                 return; //we found something other than white space
-            
+
 
         }
 
@@ -259,7 +259,7 @@ public class Scanner
      */
     public void getNextLine()
     {
-        
+
 
         if(!bGetLine) //if there are no more lines
             return;
@@ -267,7 +267,7 @@ public class Scanner
         //this is how to capture and set up a new line form the
         //sourceLineM
         //increase the line count
-        
+
 
         this.iLen=0; //reset the length to make statement true
 
@@ -275,7 +275,7 @@ public class Scanner
         while(iLen==0) //skip newlines
         {
             this.iSourceLineNr++;
-            
+
             if(this.iSourceLineNr == this.iTotalLines) //if we have no more lines
         {
             this.bGetLine = false; //set signal to let other function know.
@@ -286,16 +286,16 @@ public class Scanner
             this.textCharM = this.sTokenStr.toCharArray();
             this.iLen = this.textCharM.length;
             this.iColPos=0;
-            
-            
+
+
             //then print the line
             //printCurrentLine(); //print the current line
-            
+
         }
 
         return;
     }
-    
+
     /**
      * gets the next line of text from
      * the array list of lines
@@ -308,18 +308,18 @@ public class Scanner
      */
     public void setPosition(int iColPos, int iSourceLineNm) throws Error
     {
-        
-        
+
+
 
         if(bGetLine == false)
         {
             this.bGetLine = true;
             this.bEndToken = true;
         }
-        
+
 
         this.iSourceLineNr = iSourceLineNm-1;
-        
+
         getNextLine();
         this.iColPos = iColPos;
         getToken();
@@ -331,13 +331,13 @@ public class Scanner
         return;
     }
 
-    
+
     public void backToken() throws Error
     {
-        
+
         setPosition(this.ibColPos, this.ibLineNr);
-        
-       
+
+
         return;
     }
 
@@ -354,9 +354,9 @@ public class Scanner
      */
     public void printCurrentLine()
     {
-        
+
         System.out.println("  " + this.iSourceLineNr + " " + this.sTokenStr);
-        
+
         return;
     }
 
@@ -375,7 +375,7 @@ public class Scanner
     public String getToken() throws Error
     {
 
-       
+
 
         //Some local vars to keep track of
         //the current char and start position.
@@ -401,17 +401,17 @@ public class Scanner
                 return "";
             }
 
-        
+
         copyTokens(); //copies the previous nextToken to the
                       //currentToken
-        
+
         if (this.bShowToken)
         {
             System.out.print("\t\t...Token: ");
             this.currentToken.printToken();
         }
         rmWhiteSpace(); //function to remove the whitespace
-		
+
 		//Recognize arrays
         if(this.currentToken.subClassif == SubClassif.IDENTIFIER)
         {
@@ -421,8 +421,8 @@ public class Scanner
                 this.currentToken.tkPrec = 16;
                 this.currentToken.stPrec = 0;
                 this.currentToken.bArrayBracket = true;
-                
-                
+
+
                 STEntry entry = this.symbolTable.hashMap.get(this.currentToken.tokenStr);
                 if (entry instanceof STIdentifier)
                 {
@@ -432,17 +432,17 @@ public class Scanner
                     idEntry.tkPrec = 16;
                    this.symbolTable.putSymbol(this.currentToken.tokenStr, idEntry);
                 }
-                
+
                 this.iColPos++;
                 rmWhiteSpace();
-                
-                
-                
+
+
+
             }
         }
-   
+
         start = iColPos; //save the start position
-        
+
 
         while (true)
         {
@@ -455,7 +455,7 @@ public class Scanner
             if(this.iColPos >= this.iLen) //if we are at the end of the line
             { //the token is the starting to the end
 
-                
+
                 //save the tokens attributes.
                 this.nextToken.tokenStr = this.sTokenStr.substring(start, iColPos);
                 this.nextToken.primClassif = Classif.OPERAND;
@@ -470,7 +470,7 @@ public class Scanner
                             STIdentifier idEntry = (STIdentifier) entry;
                             this.nextToken.primClassif = idEntry.primClassif;
                             this.nextToken.subClassif = idEntry.dclType;
-                          
+
                         } else if (entry instanceof STFunction)
                         {
                             STFunction idEntry = (STFunction) entry;
@@ -481,10 +481,10 @@ public class Scanner
                             STControl idEntry = (STControl) entry;
                             this.nextToken.primClassif = idEntry.primClassif;
                             this.nextToken.subClassif = idEntry.subClassif;
-                        } 
+                        }
                         //once the next token's attrubutes are restored
-                
-               
+
+
                 //return the current token's string
                 return this.currentToken.tokenStr;
 
@@ -512,7 +512,7 @@ public class Scanner
                             if(this.sTokenStr.charAt(this.iColPos+1) == '/')
                             {
                                 comment(); //do the comment routine
-                                this.iColPos--; 
+                                this.iColPos--;
                             }
                             else
                             {
@@ -572,10 +572,10 @@ public class Scanner
                             this.nextToken.tkPrec = 9;
                             this.nextToken.stPrec = 9;
                             break;
-                        case "<": 
+                        case "<":
                             this.nextToken.tkPrec = 6;
                             this.nextToken.stPrec = 6;
-                            
+
                             //checks to see if it is a compound operator
                             if (this.iColPos+1 != this.iLen &&  this.textCharM[this.iColPos+1] == '=')
                             {
@@ -592,18 +592,18 @@ public class Scanner
                             }
                             break;
                         case ">":
-                            
+
                             this.nextToken.tkPrec = 6;
                             this.nextToken.stPrec = 6;
                             //checks to see if it is a compound operator
                             if (this.iColPos+1 != this.iLen &&  this.textCharM[this.iColPos+1] == '=')
                             {
                                 this.iColPos++;
-                             
+
                                 this.nextToken.primClassif = Classif.OPERATOR;
                                 this.nextToken.subClassif = SubClassif.EMPTY;
                                 this.nextToken.tokenStr = this.sTokenStr.substring(start, this.iColPos+1);
-                                
+
                             }
                             else
                             {
@@ -622,17 +622,17 @@ public class Scanner
                                 this.nextToken.subClassif = SubClassif.EMPTY;
                                 //assign the new operator to the token string
                                 this.nextToken.tokenStr = this.sTokenStr.substring(start, this.iColPos+1);
-                                
+
                             }
-                            else 
+                            else
                             {
-                                
+
                                 this.nextToken.primClassif = Classif.OPERATOR;
                                 this.nextToken.subClassif = SubClassif.EMPTY;
                             }
                             break;
                         case "=":
-                            
+
                             //checks to see if it is a compound operator
                              if (this.iColPos+1 != this.iLen && this.textCharM[this.iColPos+1] == '=')
                             {
@@ -643,7 +643,7 @@ public class Scanner
                                 this.nextToken.primClassif = Classif.OPERATOR;
                                 this.nextToken.subClassif = SubClassif.EMPTY;
                                 this.nextToken.tokenStr = this.sTokenStr.substring(start, this.iColPos+1);
-                                
+
                             }
                             else
                             {
@@ -700,7 +700,7 @@ public class Scanner
                             this.nextToken.primClassif = Classif.SEPARATOR;
                             this.nextToken.subClassif = SubClassif.EMPTY;
                             break;
-                       
+
                     }
 
                     this.nextToken.iColPos = this.iColPos; //save the current iColPos to the token.
@@ -712,7 +712,7 @@ public class Scanner
                 else //if the nextToken is not a delimiter.
                 {
 
-                   
+
 
                     //save the token string in nextToken
                     this.nextToken.tokenStr = this.sTokenStr.substring(start, iColPos);
@@ -726,7 +726,7 @@ public class Scanner
 
                    //if Token does not exist in the symbolTable
                     if(!this.symbolTable.hashMap.containsKey(this.nextToken.tokenStr))
-                    { 
+                    {
 
                         switch (this.currentToken.tokenStr) //switches on current token
                         { //if the current case is an Declaration, the nextToken will be of that type
@@ -791,11 +791,11 @@ public class Scanner
                                 break;
 
                         }
-                        
+
                         switch(this.nextToken.tokenStr)
                         {
                             case "IN":
-                                
+
                                 this.nextToken.primClassif = Classif.OPERATOR;
                                 this.nextToken.subClassif = SubClassif.IDENTIFIER;
                                 this.nextToken.iSourceLineNr = this.iSourceLineNr;
@@ -847,16 +847,16 @@ public class Scanner
                                 this.symbolTable.hashMap.put(this.nextToken.tokenStr, new STIdentifier(this.nextToken.tokenStr, this.nextToken.primClassif, this.nextToken.subClassif, this.nextToken.stPrec, this.nextToken.tkPrec));
                                 break;
                         }
-                        
-                        
-                        
+
+
+
                     } else //if it is already in the symbol table
                     {
                         //System.out.printf("NewToken [%s] is int the symboleTable\n", this.nextToken.tokenStr);
-                        
+
                         this.nextToken.iColPos = this.iColPos;
                         this.nextToken.iSourceLineNr = this.iSourceLineNr;
-                        
+
                         STEntry entry = this.symbolTable.hashMap.get(this.nextToken.tokenStr);
                         if (entry instanceof STIdentifier)
                         {
@@ -870,10 +870,10 @@ public class Scanner
                                 this.nextToken.bArrayBracket = false;
                             }
                             //this.nextToken.classStruct = idEntry.structure;
-                            
+
                             if(idEntry.structure != null)
                                 this.nextToken.classStruct = idEntry.structure;
-                          
+
                         } else if (entry instanceof STFunction)
                         {
                             STFunction idEntry = (STFunction) entry;
@@ -881,15 +881,15 @@ public class Scanner
                             this.nextToken.subClassif = idEntry.type;
                             this.nextToken.stPrec = idEntry.stPrec;
                             this.nextToken.tkPrec = idEntry.tkPrec;
-                            
+
                         } else if (entry instanceof STControl)
                         {
                             STControl idEntry = (STControl) entry;
                             this.nextToken.primClassif = idEntry.primClassif;
                             this.nextToken.subClassif = idEntry.subClassif;
-                        } 
-                        
-                        
+                        }
+
+
                         if(this.nextToken.primClassif == Classif.FUNCTION)
                         {
                             this.nextToken.tkPrec = 16;
@@ -897,7 +897,7 @@ public class Scanner
                         }
 
                     }
-      
+
                     return this.currentToken.tokenStr;
 
                 }
@@ -908,7 +908,7 @@ public class Scanner
             //if the char is a digit
             if(Character.isDigit(this.textCharM[start]))
             { //sub-routine to validate digits
-               
+
                 //System.out.printf("\t\t...start=%d, iColPos=%d\n", start, this.iColPos);
                 //System.out.printf("\t\t...iColPos=%d\n", this.iColPos);
                //System.out.println("alsjdflaksjdflkajds;kjfkja;sldjfja;sldjkf");
@@ -946,7 +946,7 @@ public class Scanner
 
                     if(!Character.isDigit(this.textCharM[this.iColPos])) //checks to see if the current char is not a digit
                     {
-                        
+
                         this.nextToken.tkPrec = 0;
                         this.nextToken.stPrec = 0;
 
@@ -955,7 +955,7 @@ public class Scanner
                             //check to see if there is a char that is a digit after the decimal and if we have see a deciaml already
                             if(this.iColPos + 1 == this.iLen || !Character.isDigit(this.textCharM[this.iColPos+1]) || bDecimal)
                                 errorWithLine("Expecting digits after '.'");
-                            
+
                             bDecimal = true;  //set the decimal signal to ture.
                         }
                         else
@@ -966,15 +966,15 @@ public class Scanner
                 }
                 //throw new Exception("ERROR Line %d: %s\nFILE: %s\nInvalid number declaration\n", this.iSourceLineNr, this.sTokenStr, this.sourceFileNm);
                 //System.out.printf("\t\t...textCharM[%d] = %c\n", this.iColPos-1, this.textCharM[this.iColPos - 1]);
-                
+
                 this.nextToken.primClassif = Classif.OPERAND;
                 this.nextToken.subClassif = SubClassif.INTEGER;
                 this.nextToken.tokenStr = this.sTokenStr.substring(start, this.iColPos);
                 getNextLine();
                 return this.currentToken.tokenStr;
                 //throw new Error("Line " + this.iSourceLineNr + " Invalid Number: " + this.sTokenStr);
-                
-                
+
+
             }
             this.iColPos++; //increase the col position
 
@@ -982,17 +982,17 @@ public class Scanner
 
     }
 
-    
-    
-    
-    
-    
+
+
+
+
+
 
 
 /**
  * This function is to skip over any comments.
  * <p>
- * 
+ *
  * @return void
  */
     public void comment()
@@ -1001,15 +1001,15 @@ public class Scanner
         getNextLine();
         //save the current string
         String oldCurrentToken = this.currentToken.tokenStr;
-        try 
+        try
         {
             //remove any whitespace if any
             rmWhiteSpace();
-            //load the new next token which also advances the 
+            //load the new next token which also advances the
             //current token to '/' from the comment
             getToken();
-          
-        } catch (Exception e) 
+
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -1018,24 +1018,24 @@ public class Scanner
         return;
     }
 
-   
+
     /**
-     * ends on the semicolon or colon where exec should then 
+     * ends on the semicolon or colon where exec should then
      * try and get the next token which should be the first
      * token of the next statement. <p>
      * This also loads the new tokens into the current and next tokens
      * for the parser to take over calling getNext.
-     * 
+     *
      * @throws Error
-     * @throws Exception 
+     * @throws Exception
      */
-	
+
      public void skipBoth() throws Error
     {
         boolean found = false;
         //while there is more line left
 		while(this.iColPos <= this.iLen)
-        {   
+        {
             //System.out.printf("Current textCharM[%d]=\'%c\'\n", this.iColPos, this.textCharM[this.iColPos]);
             if(this.textCharM[this.iColPos] == ';' || this.textCharM[this.iColPos] == ':')
             {
@@ -1047,15 +1047,15 @@ public class Scanner
 			{
 				getNextLine();
 				rmWhiteSpace();
-				
+
 			}
         }
         //if(!this.currentToken.tokenStr.equals(";" ) || !this.currentToken.tokenStr.equals(";"))
         //    System.out.printf("TRUE:::\n");
-        
+
         if(found != true && this.currentToken.tokenStr.equals(";" ) || this.currentToken.tokenStr.equals(";"))
             errorWithCurrent("Missing \':\' or \';\' at the end of expression.");
-        
+
         //System.out.println("before currentToken=" + this.currentToken.tokenStr);
         if(this.iColPos == this.iLen)
         {
@@ -1064,17 +1064,17 @@ public class Scanner
             //System.out.println("new CurrentToken=" + this.currentToken.tokenStr);
             return;
         }
-        
+
         getToken();
         getToken();
-        
+
         //System.out.println("new CurrentToken=" + this.currentToken.tokenStr);
-        
+
         return;
     }
 
-    
-  
+
+
 
     /**
      * This function is a process that checks a
@@ -1103,7 +1103,7 @@ public class Scanner
 
              //range of ascii printable char.
             if(this.textCharM[this.iColPos] > 31 && this.textCharM[this.iColPos] < 127)
-            {  
+            {
                 if(this.textCharM[this.iColPos] == '\\') //handel the \ cases
                 {
                     if(this.iColPos+1<iLen)
@@ -1158,10 +1158,10 @@ public class Scanner
                     //set the attributes of the token
                     this.nextToken.primClassif = Classif.OPERAND;
                     this.nextToken.subClassif = SubClassif.STRING;
-					
+
 					if(Date.validate(this.nextToken.tokenStr) == 0)		//if a valid date set subclass to DATE
 						this.nextToken.subClassif = SubClassif.DATE;
-					
+
                     return;
                 }
                 else
@@ -1174,13 +1174,13 @@ public class Scanner
             }
             else
                 this.iColPos++;
-            
+
              if(this.iColPos == this.iLen)
             {
                 getNextLine();
                 rmWhiteSpace();
             }
-            
+
         }
 
         throw new Error("Line " + this.iSourceLineNr + " Invalid string:" + this.sTokenStr);
@@ -1199,18 +1199,18 @@ public class Scanner
     private void stringDouble() throws Error
     {
 
-        
+
         //create a new char[] to hold the new string
         char stringLit[] = new char[this.iLen];
         //counter is our position in the new char[]
         int counter=0;
         char c;
-        
 
-       
-        
+
+
+
         this.iColPos++; //skip over the double quote
-        
+
          if(this.iColPos == this.iLen)
         {
             getNextLine();
@@ -1221,12 +1221,12 @@ public class Scanner
 
 
          c = this.textCharM[iColPos];
-         
+
         while(iColPos < iLen) //loop while there is still chars left
         {
-            
+
             c = this.textCharM[iColPos];
-            
+
            //range of ascii printable char.
             if(c > 31 && c < 127)
             {
@@ -1277,9 +1277,9 @@ public class Scanner
                             default:
                                this.iColPos++;
                         }
-                        
-                        
-                         
+
+
+
                     }
                     else
                     {
@@ -1288,9 +1288,9 @@ public class Scanner
 
                     }
                 }
-                
-                
-                
+
+
+
 
                 if(this.textCharM[this.iColPos] == '\"') //if we are at the end of the string
                 {
@@ -1298,28 +1298,28 @@ public class Scanner
                     //set the attributes of the token
                     this.nextToken.primClassif = Classif.OPERAND;
                     this.nextToken.subClassif = SubClassif.STRING;
-					
+
 					//String temp = new String();
 					//temp = this.nextToken.tokenStr.trim();
 					if(Date.validate(this.nextToken.tokenStr.trim())==0)		//if a valid date set subclass to DATE
 						this.nextToken.subClassif = SubClassif.DATE;
-                    
+
                     //this.iColPos++;
-					
+
                     return;
                 }
-                else 
+                else
                 {
                     stringLit[counter] = this.textCharM[this.iColPos];
                     counter++;
                     this.iColPos++;
-                    
-                 
+
+
                 }
             }
             else
                 this.iColPos++;
-            
+
             if(this.iColPos == this.iLen)
             {
                 getNextLine();
@@ -1327,18 +1327,18 @@ public class Scanner
                 rmWhiteSpace();
 
             }
-            
-            
-            
+
+
+
         }
-        
+
         String err = String.format("Line %d  Invalid string: %s\nMissing \'\"\'", this.iSourceLineNr+1, this.sTokenStr);
         throw new Error(err);
     }
-    
+
     /**
      * Create a new copy of the current token to prevent unwanted alteration of current token
-     * @return 
+     * @return
      */
     public Token getCurrentToken()
     {
@@ -1351,8 +1351,8 @@ public class Scanner
         newToken.tkPrec = this.currentToken.tkPrec;
         newToken.tokenStr = this.currentToken.tokenStr;
         newToken.classStruct = this.currentToken.classStruct;
-        
-        
+
+
         return newToken;
     }
 
@@ -1369,28 +1369,28 @@ public class Scanner
     }
 
 
-    
-    
-    
+
+
+
     public void errorWithCurrent(String msg) throws Error
     {
         String err = String.format("Line %d: \'%s\'\nToken: '%s'\nMessage: %s\n", this.currentToken.iSourceLineNr+1, this.currentToken.tokenStr, this.currentToken.tokenStr, msg);
         throw new Error(err);
     }
-    
+
     public void errorWithNext(String msg) throws Error
     {
         String err = String.format("Line %d: \'%s\'\nToken: %s\nMessage: %s\n", this.iSourceLineNr, Utility.CharArrayToString(textCharM), this.currentToken.tokenStr, msg);
         throw new Error(err);
     }
-    
+
     public void errorWithLine(String msg) throws Error
     {
         String err = String.format("Line %d: \'%s\'\nMessage: %s\n", (this.iSourceLineNr+1), Utility.CharArrayToString(textCharM), msg);
         throw new Error(err);
     }
-    
-    
+
+
     public void debugMessage(String msg) throws Error
     {
         String fMsg = String.format("\t\t...%s", msg);
@@ -1398,22 +1398,22 @@ public class Scanner
     }
 	public void skipTo(String value) throws Error
 	{
-		
+
 		if(value.equals(";"))
 		{
 			semiSkip();
 			return;
 		}
-			
+
 		if(value.equals(":"))
 		{
 			skipColon();
 			return;
 		}
-		
+
 		//while the current token does not equal the delimeter
 		while(!this.currentToken.tokenStr.equals(value))
-		{   
+		{
 			//if we have encountered a end statement
 			if(this.currentToken.tokenStr.equals(";") || this.currentToken.tokenStr.equals(":"))
 
@@ -1422,16 +1422,16 @@ public class Scanner
 			getToken();
 
 		}
-        
+
         return;
 	}
-	
-	
-	
+
+
+
 	public void semiSkip() throws Error
 	{
 		while(this.currentToken.tokenStr.charAt(0) != ';')
-		{   
+		{
 			//if we have encountered a end statement
 			if(this.currentToken.tokenStr.equals(":"))
 
@@ -1441,11 +1441,11 @@ public class Scanner
 
 		}
 	}
-	
-    
-    
-	
-	
+
+
+
+
+
 	public boolean curIsColon()
 	{
 		if(this.currentToken.tokenStr.equals(":"))
@@ -1458,19 +1458,19 @@ public class Scanner
 			return true;
 		return false;
 	}
-	
+
 	public boolean curIsValue(String value)
 	{
 		if(this.currentToken.tokenStr.equals(value))
 			return true;
 		return false;
 	}
-	
-	
+
+
     public void skipColon() throws Error
 	{
 		while(this.currentToken.tokenStr.charAt(0) != ':')
-		{   
+		{
 			//if we have encountered a end statement
 			if(this.currentToken.tokenStr.equals(";"))
 
@@ -1482,15 +1482,15 @@ public class Scanner
 	}
 
     /**
-     * Set the subClass to unary minus of the 
+     * Set the subClass to unary minus of the
      * nextToken if it is an unary minus.
-     * <p> 
-     * 
+     * <p>
+     *
      * @return void
      */
-    public void unaryMcheck() 
+    public void unaryMcheck()
     {
-       
+
         //if there was an opertor before the '-'
         if(this.currentToken.primClassif == Classif.OPERATOR)
         {
@@ -1506,36 +1506,36 @@ public class Scanner
         //if it is an unary seperator
         if(unarySeps.contains(this.currentToken.tokenStr) || curIsValue("by") || curIsValue("to"))
             this.nextToken.subClassif = SubClassif.UNARY_M;
-    
-        
+
+
         return;
-        
-       
+
+
     }
-	
+
 	public ResultValue tokenToResultV(Token value)
 	{
 		ResultValue newRes = new ResultValue();
-		
+
 		newRes.structure = value.classStruct;
 		newRes.type = value.subClassif;
 		newRes.value = value.tokenStr;
 
-        
-		
-		return newRes;		
+
+
+		return newRes;
 	}
-	
-	
+
+
 	public ResultValue currentToResult(Parser parse) throws Error
 	{
-		
+
             ResultValue newRes = new ResultValue();
-            
+
             //if it is not an operand, there is no result value
             if(parse.scan.currentToken.primClassif != Classif.OPERAND)
                 parse.scan.errorWithCurrent("Expecting an operand.");
-	
+
             //if it is an identifier, get the stored ResultValue
             if(parse.scan.currentToken.subClassif == SubClassif.IDENTIFIER)
             {
@@ -1545,18 +1545,18 @@ public class Scanner
                 //return the stored result value.
                 return parse.storage.getValue(parse, this.currentToken.tokenStr);
             }
-            
-            
-              
+
+
+
             newRes.type = this.currentToken.subClassif;
             newRes.value = this.currentToken.tokenStr;
             newRes.structure = ClassStruct.PRIMITIVE;
-              
-            return newRes;		
+
+            return newRes;
 	}
-    
-    
-    
+
+
+
 
 
 
