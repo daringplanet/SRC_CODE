@@ -47,7 +47,7 @@ const swaggerOptions = {
 			description: "Properties API that provides CRUD functionality",
 			contact: {
 				name: "Williamn Lippard",
-				name: "Octavio Camacho"
+				name: "Octavio C"
 			},
 		},
 
