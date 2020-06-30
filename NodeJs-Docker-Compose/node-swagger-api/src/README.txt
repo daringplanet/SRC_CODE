@@ -1,6 +1,6 @@
 Authors:
-	William Lippard, aju722
-	Octavio Camacho, dzf431
+	William Lippard, contributed 90%
+	Octavio C., contributed 10%
 
 
 Requirements to have installed:
